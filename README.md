@@ -12,7 +12,7 @@ ChessMastery is a chess-related project aimed at helping players improve their s
 
 ## Features
 
-- **Interactive Chess Board**: Provides an interactive chess board for users to play against each other or against AI.
+- **Interactive Chess Board**: Provides an interactive chess board for users to play against each other.
 - **Tutorials and Lessons**: Offers tutorials and lessons for players at different skill levels to improve their understanding of chess strategies and tactics.
 - **Puzzles and Challenges**: Includes puzzles and challenges to test and enhance users' problem-solving skills.
 - **Performance Analysis**: Analyzes users' game performances and provides insights and suggestions for improvement.
@@ -24,19 +24,15 @@ To install ChessMastery, follow these steps:
 
 1. Clone the repository to your local machine:
 
-   ```git clone https://github.com/yourusername/ChessMastery.git```
+   ```git clone https://github.com/mmujtabah/ChessMastery.git```
 
 2. Navigate to the project directory:
 
-   ```bash
-   cd ChessMastery
-   ```
+   ```cd ChessMastery```
 
 3. Install dependencies:
 
-   ```bash
-   npm install
-   ```
+   ```npm install```
 
 4. Configure the project settings as needed.
 
@@ -46,9 +42,7 @@ To use ChessMastery, follow these steps:
 
 1. Run the application:
 
-   ```bash
-   npm start
-   ```
+   ```npm start```
 
 2. Access the application through your web browser at [http://localhost:3000](http://localhost:3000).
 
