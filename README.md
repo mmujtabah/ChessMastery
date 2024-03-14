@@ -1,6 +1,4 @@
 # ChessMastery
-```
-# ChessMastery
 
 ChessMastery is a chess-related project aimed at helping players improve their skills, offering various features and resources to enhance their mastery of the game.
 
@@ -26,9 +24,7 @@ To install ChessMastery, follow these steps:
 
 1. Clone the repository to your local machine:
 
-   ```bash
-   git clone https://github.com/yourusername/ChessMastery.git
-   ```
+   ```git clone https://github.com/yourusername/ChessMastery.git```
 
 2. Navigate to the project directory:
 
