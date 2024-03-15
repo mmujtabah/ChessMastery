@@ -32,7 +32,7 @@ To install ChessMastery, follow these steps:
 
 3. Install dependencies:
 
-   ```npm install```
+   ```sfml```
 
 4. Configure the project settings as needed.
 
