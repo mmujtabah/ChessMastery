@@ -7,6 +7,7 @@
 int main()
 {
     ChessBoard obj;
+    obj.drawMatrix();
     static sf::RectangleShape board[8][8];
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     // Extract width and height
