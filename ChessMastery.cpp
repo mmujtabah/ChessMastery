@@ -62,10 +62,9 @@ int main()
     while (obj->WindowIsOpen())
     {
         obj->pollEvents();
-        obj->drawBoard();
         obj->renderWindow();
-    }
-
+        obj->drawBoard();
+    } 
     delete obj; // Deallocate ChessBoard object from the heap
     return 0;
 }

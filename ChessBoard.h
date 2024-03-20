@@ -16,11 +16,24 @@ private:
 	sf::RenderWindow* window;
 	sf::VideoMode desktopMode;
 	sf::RectangleShape board[8][8];
+	sf::RectangleShape playButton; // Declaration of play button
+	sf::RectangleShape exitButton; // Declaration of exit button
 	sf::Event event;
 	sf::Image Icon;
+	sf::Font** fonts; // New font for menu buttons
+	sf::Text playText; // New text for "Play" button
+	sf::Text exitText; // New text for "Exit" button
+	bool playButtonPressed; // Flag to track if the "Play" button is pressed
+	
 public:
 	ChessBoard();
 	/*void drawBoard(sf::RenderWindow& window, sf::RectangleShape board[][8], float cellSize, int screenWidth, int screenHeight);*/
+	enum GameState {
+		MENU,
+		PLAYING,
+		GAME_OVER
+	};
+	GameState gameState;
 	void drawBoard();
 	void drawMatrix();
 	bool WindowIsOpen() const;
@@ -31,5 +44,7 @@ public:
 	void initFonts();
 	void initText();
 	void initWindow();
+	void handleMouseClick(const sf::Vector2i& mousePosition);
+	GameState getGameState();
 	virtual ~ChessBoard();
 };

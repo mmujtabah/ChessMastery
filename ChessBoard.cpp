@@ -3,7 +3,7 @@
 #include <iostream>
 #include "ChessBoard.h"
 
-ChessBoard::ChessBoard() : event()
+ChessBoard::ChessBoard() : event(), playButtonPressed(false)
 {
 	this->screenWidth = 0;
 	this->screenHeight = 0;
@@ -11,7 +11,19 @@ ChessBoard::ChessBoard() : event()
 	this->endGame = false;
 	this->boardData = nullptr;
 	this->window = nullptr;
-	
+	this->fonts = new sf::Font *[2];
+	this->initFonts();
+	this->initWindow();
+	this->gameState = MENU;
+	// Initialize play button
+	playButton.setSize(sf::Vector2f(200, 50)); // Set size of the button
+	playButton.setPosition(100, 200); // Set position of the button
+	playButton.setFillColor(sf::Color::Green); // Set color of the button
+
+	// Initialize exit button
+	exitButton.setSize(sf::Vector2f(200, 50)); // Set size of the button
+	exitButton.setPosition(100, 300); // Set position of the button
+	exitButton.setFillColor(sf::Color::Red); // Set color of the button
 	this->boardData = new int* [8];
 	for (int i = 0; i < 8; i++)
 	{
@@ -42,16 +54,6 @@ ChessBoard::ChessBoard() : event()
 		this->boardData[1][i] = 11;
 		this->boardData[6][i] = 5;
 	}
-	// Load Image Textures
-	for (int i = 0; i < 12; i++)
-	{
-		if (!textures[i].loadFromFile("assets/images/" + std::to_string(i) + ".png"))
-		{
-			std::cout << "Failed to load texture: " << "assets/images/" + std::to_string(i) + ".png" << std::endl;
-			return;
-		}
-		textures[i].setSmooth(true);// Set the smooth property for the texture
-	}
 }
 
 void ChessBoard::initWindow()
@@ -62,11 +64,48 @@ void ChessBoard::initWindow()
 	this->window = new sf::RenderWindow(this->desktopMode, "Chess Mastery", sf::Style::Default);
 	this->window->setFramerateLimit(60);
 	this->CellSize = std::min(screenWidth, screenHeight) / 10.0f;
+	// Load Icon
 	if (!this->Icon.loadFromFile("assets/images/icon.png"))
 	{
 		std::cout << "Failed to load icon file";
 	}
 	this->window->setIcon(this->Icon.getSize().x, this->Icon.getSize().y, this->Icon.getPixelsPtr());
+	// Load Image Textures
+	for (int i = 0; i < 12; i++)
+	{
+		if (!textures[i].loadFromFile("assets/images/" + std::to_string(i) + ".png"))
+		{
+			std::cout << "Failed to load texture: " << "assets/images/" + std::to_string(i) + ".png" << std::endl;
+			return;
+		}
+		textures[i].setSmooth(true);// Set the smooth property for the texture
+	}
+	playText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
+	playText.setCharacterSize(40);
+	playText.setFillColor(sf::Color::Red);
+	playText.setString("Play");
+	playText.setPosition(400.0f, 420.0f);
+	playText.setOutlineThickness(2.0f);
+	exitText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
+	exitText.setCharacterSize(40);
+	exitText.setFillColor(sf::Color::Red);
+	exitText.setString("Exit");
+	exitText.setPosition(400.0f, 420.0f);
+	exitText.setOutlineThickness(2.0f);
+}
+
+void ChessBoard::initFonts()
+{
+	// Load fonts into the fonts array
+	for (int i = 0; i < 2; ++i) {
+		this->fonts[i] = new sf::Font;
+		std::string fontFilename = "assets/fonts/" + std::to_string(i) + ".ttf";
+		if (!fonts[i]->loadFromFile(fontFilename)) {
+			std::cerr << "Failed to load font " << fontFilename << "!" << std::endl;
+			// Handle failure (e.g., delete already loaded fonts and return)
+			return;
+		}
+	}
 }
 
 bool ChessBoard::WindowIsOpen() const
@@ -81,6 +120,20 @@ bool ChessBoard::WindowIsOpen() const
 	}
 }
 
+void ChessBoard::handleMouseClick(const sf::Vector2i& mousePosition)
+{
+	// Check if the click is within the bounds of the "Play" button
+	if (gameState == MENU && playButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition))) {
+		// Start the game
+		gameState = PLAYING;
+
+	}
+	// Check if the click is within the bounds of the "Exit" button
+	else if (gameState == MENU && exitButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition))) {
+		// Close the window
+		window->close();
+	}
+}
 void ChessBoard::pollEvents()
 {
 	while (this->window->pollEvent(this->event))
@@ -90,51 +143,135 @@ void ChessBoard::pollEvents()
 		case sf::Event::Closed:
 			this->window->close();
 			break;
+		case sf::Event::MouseButtonPressed:
+			if (this->event.mouseButton.button == sf::Mouse::Left) {
+				handleMouseClick(sf::Mouse::getPosition(*window));
+			}
+			break;
 		}
 	}
 }
 
 void ChessBoard::drawBoard()
 {
-	// Calculate left and top margins
-	float leftMargin = (this->window->getSize().x - (10 * this->CellSize)) / 5;
-	float topMargin = (window->getSize().y - (8 * this->CellSize)) / 1;
+	// Clear the window
+	this->window->clear();
 
-	for (int i = 0; i < 8; i++)
+	// Check the game state
+	switch (gameState)
 	{
-		for (int j = 0; j < 8; j++)
+	case MENU:
+		// Draw menu buttons
+		this->window->draw(playButton);
+		this->window->draw(exitButton);
+		this->window->draw(playText);
+		this->window->draw(exitText);
+		break;
+	case PLAYING:
+		// Calculate left and top margins
+		float leftMargin = (this->window->getSize().x - (10 * this->CellSize)) / 5;
+		float topMargin = (window->getSize().y - (8 * this->CellSize)) / 1;
+		for (int i = 0; i < 8; i++)
 		{
-			// Draw board cell
-			if ((i + j) % 2 == 0)
+			for (int j = 0; j < 8; j++)
 			{
-				board[i][j].setFillColor(sf::Color(239, 237, 209)); // Milk White
-			}
-			else
-			{
-				board[i][j].setFillColor(sf::Color(120, 150, 86)); // Green
-			}
-			float PositionX = leftMargin + j * this->CellSize, PositionY = topMargin + i * this->CellSize;
-			board[i][j].setSize(sf::Vector2f(this->CellSize, this->CellSize));
-			board[i][j].setPosition(PositionX, PositionY);
-			this->window->draw(board[i][j]);
-
-			// Draw piece sprite if there's a piece at this position
-			if (boardData[i][j] != -1)
-			{
-				sf::Sprite sprite;
-				sprite.setTexture(textures[boardData[i][j]]); // Set the texture
-				float scale = this->CellSize / static_cast<float>(textures[boardData[i][j]].getSize().x);
-				sprite.setScale(scale, scale);
-				float OffsetX = (this->CellSize - sprite.getGlobalBounds().width) / 2.0f;
-				float OffsetY = (this->CellSize - sprite.getGlobalBounds().height) / 2.0f;
-				sprite.setPosition(PositionX + OffsetX, PositionY + OffsetY);
-				window->draw(sprite);
+				// Draw board cell
+				if ((i + j) % 2 == 0)
+				{
+					board[i][j].setFillColor(sf::Color(239, 237, 209)); // Milk White
+				}
+				else
+				{
+					board[i][j].setFillColor(sf::Color(120, 150, 86)); // Green
+				}
+				float PositionX = leftMargin + j * this->CellSize, PositionY = topMargin + i * this->CellSize;
+				board[i][j].setSize(sf::Vector2f(this->CellSize, this->CellSize));
+				board[i][j].setPosition(PositionX, PositionY);
+				this->window->draw(board[i][j]);
+				// Draw piece sprite if there's a piece at this position
+				if (boardData[i][j] != -1)
+				{
+					sf::Sprite sprite;
+					sprite.setTexture(textures[boardData[i][j]]); // Set the texture
+					float scale = this->CellSize / static_cast<float>(textures[boardData[i][j]].getSize().x);
+					sprite.setScale(scale, scale);
+					float OffsetX = (this->CellSize - sprite.getGlobalBounds().width) / 2.0f;
+					float OffsetY = (this->CellSize - sprite.getGlobalBounds().height) / 2.0f;
+					sprite.setPosition(PositionX + OffsetX, PositionY + OffsetY);
+					window->draw(sprite);
+				}
 			}
 		}
+		break;
 	}
+
+	// Display the window contents
+	//this->window->display();
 }
 
 
+//void ChessBoard::pollEvents()
+//{
+//	while (this->window->pollEvent(this->event))
+//	{
+//		switch (this->event.type)
+//		{
+//		case sf::Event::Closed:
+//			this->window->close();
+//			break;
+//		case sf::Event::MouseButtonPressed:
+//			if (this->event.mouseButton.button == sf::Mouse::Left) {
+//				handleMouseClick(sf::Mouse::getPosition(*window));
+//			}
+//			break;
+//		}
+//	}
+//}
+//
+//void ChessBoard::drawBoard()
+//{
+//	// Calculate left and top margins
+//	float leftMargin = (this->window->getSize().x - (10 * this->CellSize)) / 5;
+//	float topMargin = (window->getSize().y - (8 * this->CellSize)) / 1;
+//
+//	for (int i = 0; i < 8; i++)
+//	{
+//		for (int j = 0; j < 8; j++)
+//		{
+//			// Draw board cell
+//			if ((i + j) % 2 == 0)
+//			{
+//				board[i][j].setFillColor(sf::Color(239, 237, 209)); // Milk White
+//			}
+//			else
+//			{
+//				board[i][j].setFillColor(sf::Color(120, 150, 86)); // Green
+//			}
+//			float PositionX = leftMargin + j * this->CellSize, PositionY = topMargin + i * this->CellSize;
+//			board[i][j].setSize(sf::Vector2f(this->CellSize, this->CellSize));
+//			board[i][j].setPosition(PositionX, PositionY);
+//			this->window->draw(board[i][j]);
+//
+//			// Draw piece sprite if there's a piece at this position
+//			if (boardData[i][j] != -1)
+//			{
+//				sf::Sprite sprite;
+//				sprite.setTexture(textures[boardData[i][j]]); // Set the texture
+//				float scale = this->CellSize / static_cast<float>(textures[boardData[i][j]].getSize().x);
+//				sprite.setScale(scale, scale);
+//				float OffsetX = (this->CellSize - sprite.getGlobalBounds().width) / 2.0f;
+//				float OffsetY = (this->CellSize - sprite.getGlobalBounds().height) / 2.0f;
+//				sprite.setPosition(PositionX + OffsetX, PositionY + OffsetY);
+//				window->draw(sprite);
+//			}
+//		}
+//	}
+//}
+
+ChessBoard::GameState ChessBoard::getGameState()
+{
+	return gameState;
+}
 
 
 void ChessBoard::drawMatrix()
@@ -156,12 +293,36 @@ void ChessBoard::renderWindow()
 
 ChessBoard::~ChessBoard()
 {
+	// Delete board data
 	for (int i = 0; i < 8; i++)
 	{
 		delete[] boardData[i];
 	}
 	delete[] boardData;
-	delete this->window;
+
+	// Delete fonts
+	if (fonts != nullptr)
+	{
+		for (int i = 0; i < 2; ++i)
+		{
+			if (fonts[i] != nullptr)
+			{
+				delete fonts[i];
+			}
+		}
+		delete[] fonts;
+	}
+
+	// Delete window
+	if (window != nullptr)
+	{
+		delete window;
+	}
+
+	// Set pointers to null
 	boardData = nullptr;
 	window = nullptr;
+	fonts = nullptr;
 }
+
+
