@@ -24,7 +24,7 @@ int main()
         return -1;
     }
     gameWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-
+    
     // Load the image into a texture
     sf::Texture backgroundImage;
     if (!backgroundImage.loadFromFile("assets/images/BG.png"))
