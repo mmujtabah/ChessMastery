@@ -1,10 +1,10 @@
 #pragma once
 #include "ChessPiece.h"
-class Pawn : public ChessPiece
+class Rook : public ChessPiece
 {
 private:
 public:
-	Pawn();
-	Pawn(bool color);
+	Rook();
+	Rook(bool color);
 };
 

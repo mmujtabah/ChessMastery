@@ -1,14 +1,35 @@
-#include "Pawn.h"
 #include <iostream>
-Pawn::Pawn(int CurrentX, int CurrentY, int NextX, int NextY)
+#include "Pawn.h"
+
+Pawn::Pawn()
 {
-	this->CurrentX = CurrentX;
-	this->CurrentY = CurrentY;
-	this->NextX = NextX;
-	this->NextY = NextY;
+	color = 0;
+	move = 0;
 }
-void Pawn::display()
+
+Pawn::Pawn(bool color)
 {
-	std::cout << "Current Coordinates: " << CurrentX << " " << CurrentY << std::endl;
-	std::cout << "Next Coordinates: " << NextX << " " << NextY << std::endl;
+	this->color = color;
+	move = 0;
+	this->color = color;
+	move = 0;
+	if (color)
+	{
+		if (!textures.loadFromFile("assets/images/bp.png"))
+		{
+			std::cout << "Failed to load texture: " << "assets/images/bp.png" << std::endl;
+			return;
+		}
+
+	}
+	else
+	{
+		if (!textures.loadFromFile("assets/images/bp.png"))
+		{
+			std::cout << "Failed to load texture: " << "assets/images/bp.png" << std::endl;
+			return;
+		}
+	}
+	textures.setSmooth(true);// Set the smooth property for the texture
+
 }

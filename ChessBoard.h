@@ -2,12 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-
+#include "ChessPiece.h"
 
 class ChessBoard
 {
 private:
-	int** boardData;
+	ChessPiece* board[8][8];// The board on which the Chess is played using polymorphism
+	//int** boardData;
 	unsigned int screenWidth;
 	unsigned int screenHeight;
 	bool endGame;
@@ -15,7 +16,7 @@ private:
 	sf::Texture textures[12];
 	sf::RenderWindow* window;
 	sf::VideoMode desktopMode;
-	sf::RectangleShape board[8][8];
+	sf::RectangleShape boardShape;
 	sf::RectangleShape playButton; // Declaration of play button
 	sf::RectangleShape exitButton; // Declaration of exit button
 	sf::Event event;
@@ -24,7 +25,7 @@ private:
 	sf::Text playText; // New text for "Play" button
 	sf::Text exitText; // New text for "Exit" button
 	bool playButtonPressed; // Flag to track if the "Play" button is pressed
-	
+
 public:
 	ChessBoard();
 	/*void drawBoard(sf::RenderWindow& window, sf::RectangleShape board[][8], float cellSize, int screenWidth, int screenHeight);*/
@@ -35,7 +36,6 @@ public:
 	};
 	GameState gameState;
 	void drawBoard();
-	void drawMatrix();
 	bool WindowIsOpen() const;
 	void pollEvents();
 	bool EndGame() const;
