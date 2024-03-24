@@ -76,7 +76,7 @@ void ChessBoard::initWindow()
 			std::cout << "Failed to load icon file";
 		}
 		this->window->setIcon(this->Icon.getSize().x, this->Icon.getSize().y, this->Icon.getPixelsPtr());
-		for (int i = 0; i < 1; ++i)
+		for (int i = 0; i < 2; ++i)
 		{
 			this->BackgroundTextures[i] = new sf::Texture;
 			std::string imageFile = "assets/images/bg" + std::to_string(i) + ".jpg";
@@ -223,7 +223,7 @@ void ChessBoard::drawBoard()
 				}
 				else
 				{
-					boardShape.setFillColor(sf::Color(120, 150, 86)); // Green
+					boardShape.setFillColor(sf::Color(201, 128, 60)); // Copper
 				}
 				float PositionX = leftMargin + j * this->CellSize, PositionY = topMargin + i * this->CellSize;
 				boardShape.setSize(sf::Vector2f(this->CellSize, this->CellSize));
