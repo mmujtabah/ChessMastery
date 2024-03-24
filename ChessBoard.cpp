@@ -19,6 +19,7 @@ ChessBoard::ChessBoard() : event(), playButtonPressed(false)
 	this->endGame = false;
 	this->window = nullptr;
 	this->fonts = new sf::Font *[2];
+	this->BackgroundTextures = new sf::Texture *[2];
 	this->initFonts();
 	this->initWindow();
 	this->gameState = MENU;
@@ -75,7 +76,16 @@ void ChessBoard::initWindow()
 			std::cout << "Failed to load icon file";
 		}
 		this->window->setIcon(this->Icon.getSize().x, this->Icon.getSize().y, this->Icon.getPixelsPtr());
-
+		for (int i = 0; i < 1; ++i)
+		{
+			this->BackgroundTextures[i] = new sf::Texture;
+			std::string imageFile = "assets/images/bg" + std::to_string(i) + ".jpg";
+			if (!BackgroundTextures[i]->loadFromFile(imageFile))
+			{
+				std::cerr << "Failed to load font " << imageFile << "!" << std::endl;
+				return;
+			}
+		}
 		// Calculate the center of the window
 		float centerX = this->screenWidth / 2.0f;
 		float centerY = this->screenHeight / 2.0f;
@@ -179,12 +189,16 @@ void ChessBoard::drawBoard()
 {
 	// Clear the window
 	this->window->clear();
-
+	sf::Sprite BackgroundSprite;
 	// Check the game state
 	switch (gameState)
 	{
 	case MENU:
 		// Draw menu buttons
+		BackgroundSprite.setTexture(*BackgroundTextures[0]);
+		BackgroundSprite.setScale(static_cast<float>(screenWidth) / BackgroundSprite.getLocalBounds().width, static_cast<float>(screenHeight) / BackgroundSprite.getLocalBounds().height);
+		this->window->draw(BackgroundSprite);
+		this->window->draw(BackgroundSprite);
 		this->window->draw(playButton);
 		this->window->draw(exitButton);
 		this->window->draw(playText);
@@ -192,6 +206,10 @@ void ChessBoard::drawBoard()
 		break;
 	case PLAYING:
 		// Calculate left and top margins
+		BackgroundSprite.setTexture(*BackgroundTextures[1]);
+		BackgroundSprite.setScale(static_cast<float>(screenWidth) / BackgroundSprite.getLocalBounds().width, static_cast<float>(screenHeight) / BackgroundSprite.getLocalBounds().height);
+		this->window->draw(BackgroundSprite);
+		this->window->draw(BackgroundSprite);
 		float leftMargin = (this->window->getSize().x - (10 * this->CellSize)) / 5;
 		float topMargin = (window->getSize().y - (8 * this->CellSize)) / 1;
 		for (int i = 0; i < 8; i++)

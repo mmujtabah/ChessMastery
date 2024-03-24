@@ -7,28 +7,30 @@
 class ChessBoard
 {
 private:
-	ChessPiece* board[8][8];// The board on which the Chess is played using polymorphism
-	//int** boardData;
+	ChessPiece *board[8][8]; // The board on which the Chess is played using polymorphism
+	// int** boardData;
 	unsigned int screenWidth;
 	unsigned int screenHeight;
 	bool endGame;
 	float CellSize;
-	sf::RenderWindow* window;
+	sf::Texture **BackgroundTextures;
+	sf::RenderWindow *window;
 	sf::VideoMode desktopMode;
 	sf::RectangleShape boardShape;
 	sf::RectangleShape playButton; // Declaration of play button
 	sf::RectangleShape exitButton; // Declaration of exit button
 	sf::Event event;
 	sf::Image Icon;
-	sf::Font** fonts; // New font for menu buttons
-	sf::Text playText; // New text for "Play" button
-	sf::Text exitText; // New text for "Exit" button
+	sf::Font **fonts;		// New font for menu buttons
+	sf::Text playText;		// New text for "Play" button
+	sf::Text exitText;		// New text for "Exit" button
 	bool playButtonPressed; // Flag to track if the "Play" button is pressed
 
 public:
 	ChessBoard();
 	/*void drawBoard(sf::RenderWindow& window, sf::RectangleShape board[][8], float cellSize, int screenWidth, int screenHeight);*/
-	enum GameState {
+	enum GameState
+	{
 		MENU,
 		PLAYING,
 		GAME_OVER
@@ -43,7 +45,7 @@ public:
 	void initFonts();
 	void initText();
 	void initWindow();
-	void handleMouseClick(const sf::Vector2i& mousePosition);
+	void handleMouseClick(const sf::Vector2i &mousePosition);
 	GameState getGameState();
 	virtual ~ChessBoard();
 };
