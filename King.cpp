@@ -7,32 +7,40 @@ King::King()
 {
 	color = 0;
 	move = 0;
+	State = PIECE;
 }
 
 King::King(bool color)
 {
 	this->color = color;
 	move = 0;
+	State = PIECE;
 	if (color)
 	{
 		if (!textures.loadFromFile("assets/images/wk.png"))
 		{
-			std::cout << "Failed to load texture: " << "assets/images/wk.png" << std::endl;
+			std::cout << "Failed to load texture: "
+					  << "assets/images/wk.png" << std::endl;
 			return;
 		}
-
 	}
 	else
 	{
 		if (!textures.loadFromFile("assets/images/bk.png"))
 		{
-			std::cout << "Failed to load texture: " << "assets/images/bk.png" << std::endl;
+			std::cout << "Failed to load texture: "
+					  << "assets/images/bk.png" << std::endl;
 			return;
 		}
 	}
-	textures.setSmooth(true);// Set the smooth property for the texture
+	textures.setSmooth(true); // Set the smooth property for the texture
 }
-//bool King::isValid(int xfrom, int yfrom, int xto, int yto, ChessPiece* b[8][8])
+// bool King::isValid(int xfrom, int yfrom, int xto, int yto, ChessPiece* b[8][8])
 //{
 //	return false;
-//}
+// }
+
+ChessPiece::PieceState King::getPieceState()
+{
+	return State;
+}

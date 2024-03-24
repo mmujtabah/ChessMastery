@@ -6,5 +6,6 @@ private:
 public:
 	Knight();
 	Knight(bool color);
+	PieceState getPieceState() override;
 };
 

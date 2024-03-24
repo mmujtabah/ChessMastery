@@ -13,7 +13,6 @@ private:
 	unsigned int screenHeight;
 	bool endGame;
 	float CellSize;
-	sf::Texture textures[12];
 	sf::RenderWindow* window;
 	sf::VideoMode desktopMode;
 	sf::RectangleShape boardShape;

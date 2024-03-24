@@ -6,5 +6,5 @@ private:
 public:
 	Pawn();
 	Pawn(bool color);
+	PieceState getPieceState() override;
 };
-

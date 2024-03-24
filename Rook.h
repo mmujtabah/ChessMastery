@@ -6,5 +6,5 @@ private:
 public:
 	Rook();
 	Rook(bool color);
+	PieceState getPieceState() override;
 };
-

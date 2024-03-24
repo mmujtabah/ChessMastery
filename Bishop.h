@@ -6,5 +6,6 @@ private:
 public:
 	Bishop();
 	Bishop(bool color);
+	PieceState getPieceState() override;
 };
 

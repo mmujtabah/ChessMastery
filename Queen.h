@@ -6,6 +6,5 @@ private:
 public:
 	Queen();
 	Queen(bool color);
+	PieceState getPieceState() override;
 };
-
-

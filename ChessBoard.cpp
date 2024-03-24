@@ -17,7 +17,7 @@ ChessBoard::ChessBoard() : event(), playButtonPressed(false)
 	this->screenHeight = 0;
 	this->CellSize = 0;
 	this->endGame = false;
-	//this->boardData = nullptr;
+	// this->boardData = nullptr;
 	this->window = nullptr;
 	this->fonts = new sf::Font *[2];
 	this->initFonts();
@@ -25,74 +25,48 @@ ChessBoard::ChessBoard() : event(), playButtonPressed(false)
 	this->gameState = MENU;
 	// Initialize play button
 	playButton.setSize(sf::Vector2f(200, 50)); // Set size of the button
-	playButton.setPosition(100, 200); // Set position of the button
+	playButton.setPosition(100, 200);		   // Set position of the button
 	playButton.setFillColor(sf::Color::Green); // Set color of the button
 
 	// Initialize exit button
 	exitButton.setSize(sf::Vector2f(200, 50)); // Set size of the button
-	exitButton.setPosition(100, 300); // Set position of the button
-	exitButton.setFillColor(sf::Color::Red); // Set color of the button
+	exitButton.setPosition(100, 300);		   // Set position of the button
+	exitButton.setFillColor(sf::Color::Red);   // Set color of the button
 	// Allocation for white
 	for (int i = 0; i < 8; i++)
 	{
-		board[1][i] = new Pawn(1);
+		board[1][i] = new Pawn(0);
 	}
-	board[0][7] = new Rook(1);
-	board[0][0] = new Rook(1);
-	board[0][6] = new Knight(1);
-	board[0][1] = new Knight(1);
-	board[0][5] = new Bishop(1);
-	board[0][2] = new Bishop(1);
-	board[0][4] = new Queen(1);
-	board[0][3] = new King(1);
+	board[0][7] = new Rook(0);
+	board[0][0] = new Rook(0);
+	board[0][6] = new Knight(0);
+	board[0][1] = new Knight(0);
+	board[0][5] = new Bishop(0);
+	board[0][2] = new Bishop(0);
+	board[0][4] = new Queen(0);
+	board[0][3] = new King(0);
 
 	// Allocation for black
 	for (int i = 0; i < 8; i++)
-		board[6][i] = new Pawn(0);
+	{
+		board[6][i] = new Pawn(1);
+	}
 
-	board[7][7] = new Rook(0);
-	board[7][0] = new Rook(0);
-	board[7][6] = new Knight(0);
-	board[7][1] = new Knight(0);
-	board[7][5] = new Bishop(0);
-	board[7][2] = new Bishop(0);
-	board[7][4] = new Queen(0);
-	board[7][3] = new King(0);
+	board[7][7] = new Rook(1);
+	board[7][0] = new Rook(1);
+	board[7][6] = new Knight(1);
+	board[7][1] = new Knight(1);
+	board[7][5] = new Bishop(1);
+	board[7][2] = new Bishop(1);
+	board[7][4] = new Queen(1);
+	board[7][3] = new King(1);
 
-	//For initializing blank space
+	// For initializing blank space
 	for (int i = 2; i < 6; i++)
 		for (int j = 0; j < 8; j++)
+		{
 			board[i][j] = new Blank;
-	//this->boardData = new int* [8];
-	//for (int i = 0; i < 8; i++)
-	//{
-	//	this->boardData[i] = new int[8];
-	//}
-	//for (int i = 0; i < 8; i++)
-	//{
-	//	for (int j = 0; j < 8; j++)
-	//	{
-	//		this->boardData[i][j] = -1;
-	//	}
-	//}
-	//// Placing White and Black Pieces
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	this->boardData[0][i] = 6 + i;
-	//	this->boardData[7][i] = i;
-	//}
-	//// Placing Pieces After King
-	//for (int i = 5, j = 2; i < 8 && j >= 0; i++, j--)
-	//{
-	//	this->boardData[0][i] = 6 + j;
-	//	this->boardData[7][i] = j;
-	//}
-	//// Placing Pawns
-	//for (int i = 0; i < 8; i++)
-	//{
-	//	this->boardData[1][i] = 11;
-	//	this->boardData[6][i] = 5;
-	//}
+		}
 }
 
 void ChessBoard::initWindow()
@@ -129,10 +103,12 @@ void ChessBoard::initWindow()
 void ChessBoard::initFonts()
 {
 	// Load fonts into the fonts array
-	for (int i = 0; i < 2; ++i) {
+	for (int i = 0; i < 2; ++i)
+	{
 		this->fonts[i] = new sf::Font;
 		std::string fontFilename = "assets/fonts/" + std::to_string(i) + ".ttf";
-		if (!fonts[i]->loadFromFile(fontFilename)) {
+		if (!fonts[i]->loadFromFile(fontFilename))
+		{
 			std::cerr << "Failed to load font " << fontFilename << "!" << std::endl;
 			// Handle failure (e.g., delete already loaded fonts and return)
 			return;
@@ -142,26 +118,29 @@ void ChessBoard::initFonts()
 
 bool ChessBoard::WindowIsOpen() const
 {
-	if (this->window != nullptr) {
+	if (this->window != nullptr)
+	{
 		return this->window->isOpen();
 	}
-	else {
+	else
+	{
 		// Handle the case where window is not initialized
 		std::cout << "Window not initialized";
 		return false;
 	}
 }
 
-void ChessBoard::handleMouseClick(const sf::Vector2i& mousePosition)
+void ChessBoard::handleMouseClick(const sf::Vector2i &mousePosition)
 {
 	// Check if the click is within the bounds of the "Play" button
-	if (gameState == MENU && playButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition))) {
+	if (gameState == MENU && playButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
+	{
 		// Start the game
 		gameState = PLAYING;
-
 	}
 	// Check if the click is within the bounds of the "Exit" button
-	else if (gameState == MENU && exitButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition))) {
+	else if (gameState == MENU && exitButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
+	{
 		// Close the window
 		window->close();
 	}
@@ -177,7 +156,8 @@ void ChessBoard::pollEvents()
 			this->window->close();
 			break;
 		case sf::Event::MouseButtonPressed:
-			if (this->event.mouseButton.button == sf::Mouse::Left) {
+			if (this->event.mouseButton.button == sf::Mouse::Left)
+			{
 				handleMouseClick(sf::Mouse::getPosition(*window));
 			}
 			break;
@@ -222,32 +202,30 @@ void ChessBoard::drawBoard()
 				boardShape.setPosition(PositionX, PositionY);
 				this->window->draw(boardShape);
 				// Draw piece sprite if there's a piece at this position
-				//if (boardData[i][j] != -1)
-				//{
-				//	sf::Sprite sprite;
-				//	sprite.setTexture(textures[boardData[i][j]]); // Set the texture
-				//	float scale = this->CellSize / static_cast<float>(textures[boardData[i][j]].getSize().x);
-				//	sprite.setScale(scale, scale);
-				//	float OffsetX = (this->CellSize - sprite.getGlobalBounds().width) / 2.0f;
-				//	float OffsetY = (this->CellSize - sprite.getGlobalBounds().height) / 2.0f;
-				//	sprite.setPosition(PositionX + OffsetX, PositionY + OffsetY);
-				//	window->draw(sprite);
-				//}
+				if (board[i][j]->getPieceState() == ChessPiece::PIECE)
+				{
+					sf::Sprite sprite;
+					sprite.setTexture(board[i][j]->textures); // Set the texture
+					float scale = this->CellSize / static_cast<float>(board[i][j]->textures.getSize().x);
+					sprite.setScale(scale, scale);
+					float OffsetX = (this->CellSize - sprite.getGlobalBounds().width) / 2.0f;
+					float OffsetY = (this->CellSize - sprite.getGlobalBounds().height) / 2.0f;
+					sprite.setPosition(PositionX + OffsetX, PositionY + OffsetY);
+					window->draw(sprite);
+				}
 			}
 		}
 		break;
 	}
 
 	// Display the window contents
-	//this->window->display();
+	// this->window->display();
 }
-
 
 ChessBoard::GameState ChessBoard::getGameState()
 {
 	return gameState;
 }
-
 
 void ChessBoard::renderWindow()
 {
