@@ -17,21 +17,11 @@ ChessBoard::ChessBoard() : event(), playButtonPressed(false)
 	this->screenHeight = 0;
 	this->CellSize = 0;
 	this->endGame = false;
-	// this->boardData = nullptr;
 	this->window = nullptr;
 	this->fonts = new sf::Font *[2];
 	this->initFonts();
 	this->initWindow();
 	this->gameState = MENU;
-	// Initialize play button
-	playButton.setSize(sf::Vector2f(200, 50)); // Set size of the button
-	playButton.setPosition(100, 200);		   // Set position of the button
-	playButton.setFillColor(sf::Color::Green); // Set color of the button
-
-	// Initialize exit button
-	exitButton.setSize(sf::Vector2f(200, 50)); // Set size of the button
-	exitButton.setPosition(100, 300);		   // Set position of the button
-	exitButton.setFillColor(sf::Color::Red);   // Set color of the button
 	// Allocation for white
 	for (int i = 0; i < 8; i++)
 	{
@@ -85,18 +75,38 @@ void ChessBoard::initWindow()
 			std::cout << "Failed to load icon file";
 		}
 		this->window->setIcon(this->Icon.getSize().x, this->Icon.getSize().y, this->Icon.getPixelsPtr());
+
+		// Calculate the center of the window
+		float centerX = this->screenWidth / 2.0f;
+		float centerY = this->screenHeight / 2.0f;
+
+		// Set button size and color
+		float buttonWidth = 200; // Width of the buttons
+		float buttonHeight = 50; // Height of the buttons
+		playButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+		exitButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+		playButton.setFillColor(sf::Color::Green); // Set color of the button
+		exitButton.setFillColor(sf::Color::Red);   // Set color of the button
+
+		// Calculate positions for play button
+		playButton.setPosition(centerX - buttonWidth / 2, centerY - buttonHeight);
+
+		// Calculate positions for exit button
+		exitButton.setPosition(centerX - buttonWidth / 2, centerY);
+
+		// Calculate positions for play button text
 		playText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
 		playText.setCharacterSize(40);
-		playText.setFillColor(sf::Color::Red);
+		playText.setFillColor(sf::Color::White); // Set color of the text
 		playText.setString("Play");
-		playText.setPosition(400.0f, 420.0f);
-		playText.setOutlineThickness(2.0f);
+		playText.setPosition(centerX - playText.getLocalBounds().width / 2, centerY - buttonHeight + (buttonHeight - playText.getLocalBounds().height) / 2);
+
+		// Calculate positions for exit button text
 		exitText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
 		exitText.setCharacterSize(40);
-		exitText.setFillColor(sf::Color::Red);
+		exitText.setFillColor(sf::Color::White); // Set color of the text
 		exitText.setString("Exit");
-		exitText.setPosition(400.0f, 420.0f);
-		exitText.setOutlineThickness(2.0f);
+		exitText.setPosition(centerX - exitText.getLocalBounds().width / 2, centerY + (buttonHeight - exitText.getLocalBounds().height) / 2);
 	}
 }
 
