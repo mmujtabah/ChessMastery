@@ -1,18 +1,8 @@
 #include <iostream>
 #include "Knight.h"
 
-Knight::Knight()
+Knight::Knight(bool color, int x, int y) : ChessPiece(color, x, y)
 {
-	color = 0;
-	move = 0;
-	State = PIECE;
-}
-
-Knight::Knight(bool color)
-{
-	this->color = color;
-	move = 0;
-	State = PIECE;
 	if (color)
 	{
 		if (!textures.loadFromFile("assets/images/wn.png"))

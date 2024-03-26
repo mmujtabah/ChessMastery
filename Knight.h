@@ -4,8 +4,6 @@ class Knight : public ChessPiece
 {
 private:
 public:
-	Knight();
-	Knight(bool color);
+	Knight(bool color, int x, int y);
 	PieceState getPieceState() override;
 };
-

@@ -4,8 +4,6 @@ class Bishop : public ChessPiece
 {
 private:
 public:
-	Bishop();
-	Bishop(bool color);
+	Bishop(bool color, int x, int y);
 	PieceState getPieceState() override;
 };
-

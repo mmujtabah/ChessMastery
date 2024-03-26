@@ -4,7 +4,6 @@ class Pawn : public ChessPiece
 {
 private:
 public:
-	Pawn();
-	Pawn(bool color);
+	Pawn(bool color, int x, int y);
 	PieceState getPieceState() override;
 };

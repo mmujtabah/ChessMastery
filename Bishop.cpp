@@ -1,18 +1,8 @@
 #include <iostream>
 #include "Bishop.h"
 
-Bishop::Bishop()
+Bishop::Bishop(bool color, int x, int y) : ChessPiece(color, x, y)
 {
-	color = 0;
-	move = 0;
-	State = PIECE;
-}
-
-Bishop::Bishop(bool color)
-{
-	this->color = color;
-	move = 0;
-	State = PIECE;
 	if (color)
 	{
 		if (!textures.loadFromFile("assets/images/wb.png"))

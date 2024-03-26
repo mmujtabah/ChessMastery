@@ -1,18 +1,8 @@
 #include <iostream>
 #include "Pawn.h"
 
-Pawn::Pawn()
+Pawn::Pawn(bool color, int x, int y) : ChessPiece(color, x, y)
 {
-	color = 0;
-	move = 0;
-	State = PIECE;
-}
-
-Pawn::Pawn(bool color)
-{
-	this->color = color;
-	move = 0;
-	State = PIECE;
 	if (color)
 	{
 		if (!textures.loadFromFile("assets/images/wp.png"))

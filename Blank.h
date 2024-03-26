@@ -4,6 +4,8 @@ class Blank : public ChessPiece
 {
 private:
 public:
-    Blank();
+    Blank(int x, int y);
+    int getX();
+    int getY();
     PieceState getPieceState() override;
 };

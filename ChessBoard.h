@@ -1,4 +1,4 @@
-#pragma once++
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
@@ -8,7 +8,6 @@ class ChessBoard
 {
 private:
 	ChessPiece *board[8][8]; // The board on which the Chess is played using polymorphism
-	// int** boardData;
 	unsigned int screenWidth;
 	unsigned int screenHeight;
 	bool endGame;
@@ -46,6 +45,8 @@ public:
 	void initText();
 	void initWindow();
 	void handleMouseClick(const sf::Vector2i &mousePosition);
+	void handleMouseDrag(const sf::Vector2i &mousePosition);
+	void handleMouseRelease(const sf::Vector2i &mousePosition);
 	GameState getGameState();
 	virtual ~ChessBoard();
 };

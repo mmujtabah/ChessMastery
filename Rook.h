@@ -4,7 +4,6 @@ class Rook : public ChessPiece
 {
 private:
 public:
-	Rook();
-	Rook(bool color);
+	Rook(bool color, int x, int y);
 	PieceState getPieceState() override;
 };

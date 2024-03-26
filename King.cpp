@@ -3,18 +3,8 @@
 #include <iostream>
 #include "King.h"
 
-King::King()
+King::King(bool color, int x, int y) : ChessPiece(color, x, y)
 {
-	color = 0;
-	move = 0;
-	State = PIECE;
-}
-
-King::King(bool color)
-{
-	this->color = color;
-	move = 0;
-	State = PIECE;
 	if (color)
 	{
 		if (!textures.loadFromFile("assets/images/wk.png"))

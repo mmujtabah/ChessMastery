@@ -1,16 +1,8 @@
 #include <iostream>
 #include "Queen.h"
-Queen::Queen()
+
+Queen::Queen(bool color, int x, int y) : ChessPiece(color, x, y)
 {
-	color = 0;
-	move = 0;
-	State = PIECE;
-}
-Queen::Queen(bool color)
-{
-	this->color = color;
-	move = 0;
-	State = PIECE;
 	if (color)
 	{
 		if (!textures.loadFromFile("assets/images/wq.png"))

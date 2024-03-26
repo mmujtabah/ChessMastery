@@ -1,17 +1,8 @@
 #include <iostream>
 #include "Rook.h"
-Rook::Rook()
-{
-	color = 0;
-	move = 0;
-	State = PIECE;
-}
 
-Rook::Rook(bool color)
+Rook::Rook(bool color, int x, int y) : ChessPiece(color, x, y)
 {
-	this->color = color;
-	move = 0;
-	State = PIECE;
 	if (color)
 	{
 		if (!textures.loadFromFile("assets/images/wr.png"))
