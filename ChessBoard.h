@@ -10,6 +10,8 @@ private:
 	ChessPiece *board[8][8]; // The board on which the Chess is played using polymorphism
 	unsigned int screenWidth;
 	unsigned int screenHeight;
+	int selectedPieceX;
+	int selectedPieceY;
 	bool endGame;
 	float CellSize;
 	sf::Texture **BackgroundTextures;
@@ -44,9 +46,11 @@ public:
 	void initFonts();
 	void initText();
 	void initWindow();
+	void handleWindowResize(const sf::Vector2u &size);
 	void handleMouseClick(const sf::Vector2i &mousePosition);
 	void handleMouseDrag(const sf::Vector2i &mousePosition);
 	void handleMouseRelease(const sf::Vector2i &mousePosition);
+	void updateWindowLayout();
 	GameState getGameState();
 	virtual ~ChessBoard();
 };

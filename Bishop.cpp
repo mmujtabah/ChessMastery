@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Bishop.h"
 
-Bishop::Bishop(bool color, int x, int y) : ChessPiece(color, x, y)
+Bishop::Bishop(bool color, int x, int y) : ChessPiece(color, x, y, 0)
 {
 	if (color)
 	{

@@ -89,42 +89,42 @@ void ChessBoard::initWindow()
 			}
 		}
 		// Calculate the center of the window
-		float centerX = this->screenWidth / 2.0f;
-		float centerY = this->screenHeight / 2.0f;
+		updateWindowLayout();
+		// float centerX = this->screenWidth / 2.0f;
+		// float centerY = this->screenHeight / 2.0f;
 
-		// Set button size and color
-		float buttonWidth = 200;	// Width of the buttons
-		float buttonHeight = 50;	// Height of the buttons
-		float verticalSpacing = 20; // Spacing between buttons
-		playButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
-		exitButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
-		playButton.setFillColor(sf::Color::Green); // Set color of the button
-		exitButton.setFillColor(sf::Color::Red);   // Set color of the button
+		// // Set button size and color
+		// float buttonWidth = 200;	// Width of the buttons
+		// float buttonHeight = 50;	// Height of the buttons
+		// float verticalSpacing = 20; // Spacing between buttons
+		// playButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+		// exitButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+		// playButton.setFillColor(sf::Color::Green); // Set color of the button
+		// exitButton.setFillColor(sf::Color::Red);   // Set color of the button
 
-		// Calculate positions for play button
-		playButton.setPosition(centerX - buttonWidth / 2, centerY - buttonHeight - verticalSpacing / 2);
+		// // Calculate positions for play button
+		// playButton.setPosition(centerX - buttonWidth / 2, centerY - buttonHeight - verticalSpacing / 2);
 
-		// Calculate positions for exit button
-		exitButton.setPosition(centerX - buttonWidth / 2, centerY + verticalSpacing / 2);
+		// // Calculate positions for exit button
+		// exitButton.setPosition(centerX - buttonWidth / 2, centerY + verticalSpacing / 2);
 
-		// Calculate positions for play button text
-		playText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
-		playText.setCharacterSize(40);
-		playText.setFillColor(sf::Color::White); // Set color of the text
-		playText.setString("PLAY");
-		// Center the text within the button
-		playText.setPosition(playButton.getPosition() + sf::Vector2f((buttonWidth - playText.getLocalBounds().width) / 2, (buttonHeight - playText.getLocalBounds().height) / 2 - playText.getLocalBounds().top));
+		// // Calculate positions for play button text
+		// playText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
+		// playText.setCharacterSize(40);
+		// playText.setFillColor(sf::Color::White); // Set color of the text
+		// playText.setString("PLAY");
+		// // Center the text within the button
+		// playText.setPosition(playButton.getPosition() + sf::Vector2f((buttonWidth - playText.getLocalBounds().width) / 2, (buttonHeight - playText.getLocalBounds().height) / 2 - playText.getLocalBounds().top));
 
-		// Calculate positions for exit button text
-		exitText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
-		exitText.setCharacterSize(40);
-		exitText.setFillColor(sf::Color::White); // Set color of the text
-		exitText.setString("EXIT");
-		// Center the text within the button
-		exitText.setPosition(exitButton.getPosition() + sf::Vector2f((buttonWidth - exitText.getLocalBounds().width) / 2, (buttonHeight - exitText.getLocalBounds().height) / 2 - exitText.getLocalBounds().top));
+		// // Calculate positions for exit button text
+		// exitText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
+		// exitText.setCharacterSize(40);
+		// exitText.setFillColor(sf::Color::White); // Set color of the text
+		// exitText.setString("EXIT");
+		// // Center the text within the button
+		// exitText.setPosition(exitButton.getPosition() + sf::Vector2f((buttonWidth - exitText.getLocalBounds().width) / 2, (buttonHeight - exitText.getLocalBounds().height) / 2 - exitText.getLocalBounds().top));
 	}
 }
-
 
 void ChessBoard::initFonts()
 {
@@ -156,19 +156,54 @@ bool ChessBoard::WindowIsOpen() const
 	}
 }
 
+// void ChessBoard::handleMouseClick(const sf::Vector2i &mousePosition)
+// {
+// 	// Check if the click is within the bounds of the "Play" button
+// 	if (gameState == MENU && playButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
+// 	{
+// 		// Start the game
+// 		gameState = PLAYING;
+// 	}
+// 	// Check if the click is within the bounds of the "Exit" button
+// 	else if (gameState == MENU && exitButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
+// 	{
+// 		// Close the window
+// 		window->close();
+// 	}
+// }
+
 void ChessBoard::handleMouseClick(const sf::Vector2i &mousePosition)
 {
-	// Check if the click is within the bounds of the "Play" button
-	if (gameState == MENU && playButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
+	// Handle click event based on game state
+	switch (gameState)
 	{
-		// Start the game
-		gameState = PLAYING;
-	}
-	// Check if the click is within the bounds of the "Exit" button
-	else if (gameState == MENU && exitButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
-	{
-		// Close the window
-		window->close();
+	case MENU:
+		// Check if the click is within the bounds of the "Play" button
+		if (playButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
+		{
+			// Start the game
+			gameState = PLAYING;
+		}
+		// Check if the click is within the bounds of the "Exit" button
+		else if (exitButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
+		{
+			// Close the window
+			window->close();
+		}
+		break;
+	case PLAYING:
+		// Calculate clicked cell position
+		int clickedX = mousePosition.x / CellSize;
+		int clickedY = mousePosition.y / CellSize;
+
+		// Check if the clicked cell contains a piece
+		if (board[clickedY][clickedX]->getPieceState() == ChessPiece::PIECE)
+		{
+			// Set the selected piece coordinates
+			selectedPieceX = clickedX;
+			selectedPieceY = clickedY;
+		}
+		break;
 	}
 }
 
@@ -197,6 +232,12 @@ void ChessBoard::pollEvents()
 	{
 		switch (this->event.type)
 		{
+		case sf::Event::Resized:
+		{
+			sf::Vector2u size(this->event.size.width, this->event.size.height);
+			handleWindowResize(size);
+		}
+		break;
 		case sf::Event::Closed:
 			this->window->close();
 			break;
@@ -228,18 +269,47 @@ void ChessBoard::handleMouseDrag(const sf::Vector2i &mousePosition)
 	// Update the position of the piece being dragged
 }
 
+// void ChessBoard::handleMouseRelease(const sf::Vector2i &mousePosition)
+// {
+// 	// Implement your logic for releasing the dragged piece here
+// 	// Calculate the destination cell and perform the move
+// 	int destX = mousePosition.x / this->CellSize;
+// 	int destY = mousePosition.y / this->CellSize;
+
+// 	// Perform the move if valid
+// 	// Example:
+// 	// if (isValidMove(/*parameters*/)) {
+// 	//    performMove(/*parameters*/);
+// 	// }
+// }
+
 void ChessBoard::handleMouseRelease(const sf::Vector2i &mousePosition)
 {
-	// Implement your logic for releasing the dragged piece here
-	// Calculate the destination cell and perform the move
-	int destX = mousePosition.x / this->CellSize;
-	int destY = mousePosition.y / this->CellSize;
+	// Handle release event based on game state
+	switch (gameState)
+	{
+	case PLAYING:
+		// Calculate destination cell position
+		int destX = mousePosition.x / CellSize;
+		int destY = mousePosition.y / CellSize;
 
-	// Perform the move if valid
-	// Example:
-	// if (isValidMove(/*parameters*/)) {
-	//    performMove(/*parameters*/);
-	// }
+		// Move the selected piece if valid
+		if (selectedPieceX != -1 && selectedPieceY != -1)
+		{
+			if (board[selectedPieceY][selectedPieceX]->isValid(selectedPieceY, selectedPieceX, destY, destX, board))
+			{
+				// Perform the move
+				ChessPiece *pieceToMove = board[selectedPieceY][selectedPieceX];
+				board[destY][destX] = pieceToMove;
+				board[selectedPieceY][selectedPieceX] = new Blank(selectedPieceY, selectedPieceX);
+			}
+		}
+
+		// Reset selected piece coordinates
+		selectedPieceX = -1;
+		selectedPieceY = -1;
+		break;
+	}
 }
 
 void ChessBoard::drawBoard()
@@ -307,6 +377,55 @@ void ChessBoard::drawBoard()
 
 	// Display the window contents
 	this->window->display();
+}
+
+void ChessBoard::handleWindowResize(const sf::Vector2u &size)
+{
+	this->screenWidth = size.x;
+	this->screenHeight = size.y;
+	this->CellSize = std::min(screenWidth, screenHeight) / 10.0f;
+
+	// Recalculate layout and redraw the board
+	drawBoard();
+}
+
+void ChessBoard::updateWindowLayout()
+{
+	this->CellSize = std::min(screenWidth, screenHeight) / 10.0f;
+	// Calculate center of the window
+	float centerX = this->screenWidth / 2.0f;
+	float centerY = this->screenHeight / 2.0f;
+
+	// Set button size and color
+	float buttonWidth = 200;	// Width of the buttons
+	float buttonHeight = 50;	// Height of the buttons
+	float verticalSpacing = 20; // Spacing between buttons
+	playButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+	exitButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+	playButton.setFillColor(sf::Color::Green); // Set color of the button
+	exitButton.setFillColor(sf::Color::Red);   // Set color of the button
+
+	// Calculate positions for play button
+	playButton.setPosition(centerX - buttonWidth / 2, centerY - buttonHeight - verticalSpacing / 2);
+
+	// Calculate positions for exit button
+	exitButton.setPosition(centerX - buttonWidth / 2, centerY + verticalSpacing / 2);
+
+	// Calculate positions for play button text
+	playText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
+	playText.setCharacterSize(40);
+	playText.setFillColor(sf::Color::White); // Set color of the text
+	playText.setString("PLAY");
+	// Center the text within the button
+	playText.setPosition(playButton.getPosition() + sf::Vector2f((buttonWidth - playText.getLocalBounds().width) / 2, (buttonHeight - playText.getLocalBounds().height) / 2 - playText.getLocalBounds().top));
+
+	// Calculate positions for exit button text
+	exitText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
+	exitText.setCharacterSize(40);
+	exitText.setFillColor(sf::Color::White); // Set color of the text
+	exitText.setString("EXIT");
+	// Center the text within the button
+	exitText.setPosition(exitButton.getPosition() + sf::Vector2f((buttonWidth - exitText.getLocalBounds().width) / 2, (buttonHeight - exitText.getLocalBounds().height) / 2 - exitText.getLocalBounds().top));
 }
 
 ChessBoard::GameState ChessBoard::getGameState()
