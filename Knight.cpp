@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Knight.h"
 
-Knight::Knight(bool color, int x, int y) : ChessPiece(color, x, y)
+Knight::Knight(bool color, int x, int y) : ChessPiece(color, x, y, 2)
 {
 	if (color)
 	{

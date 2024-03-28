@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Rook.h"
 
-Rook::Rook(bool color, int x, int y) : ChessPiece(color, x, y)
+Rook::Rook(bool color, int x, int y) : ChessPiece(color, x, y, 4)
 {
 	if (color)
 	{

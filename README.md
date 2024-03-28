@@ -1,5 +1,6 @@
 # ChessMastery
 
+## Overview
 ChessMastery is a chess-related project aimed at helping players improve their skills, offering various features and resources to enhance their mastery of the game.
 
 ## Table of Contents
@@ -7,6 +8,7 @@ ChessMastery is a chess-related project aimed at helping players improve their s
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Gameplay](#gameplay)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -18,35 +20,34 @@ ChessMastery is a chess-related project aimed at helping players improve their s
 - **Performance Analysis**: Analyzes users' game performances and provides insights and suggestions for improvement.
 - **Community Interaction**: Allows users to interact with each other, share tips and strategies, and participate in chess-related discussions.
 
-## Installation
+## Getting Started
+
+### Prerequisites
+
+- C++ compiler
+- SFML library (version 2.6.1)
+
+### Installation
 
 To install ChessMastery, follow these steps:
 
-1. Clone the repository to your local machine:
-
-   ```git clone https://github.com/mmujtabah/ChessMastery.git```
+1. Clone the repository to your local machine: ```git clone https://github.com/mmujtabah/ChessMastery.git```
 
 2. Navigate to the project directory:
 
    ```cd ChessMastery```
 
-3. Install dependencies:
+3. Compile the source code:
 
-   ```SFML-2.6.1```
+   ```g++ ChessMastery.cpp ChessBoard.cpp Pawn.cpp King.cpp Queen.cpp Bishop.cpp Knight.cpp Rook.cpp Blank.cpp ChessPiece.cpp -o ChessMastery -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network```
 
 4. Configure the project settings as needed.
 
-## Usage
+### Usage
 
-To use ChessMastery, follow these steps:
+Run the compiled executable: `./ChessMastery`
 
-1. Run the application:
-
-   ```npm start```
-
-2. Access the application through your web browser at [http://localhost:3000](http://localhost:3000).
-
-3. Explore the features and resources available in ChessMastery to improve your chess skills.
+## Gameplay
 
 ## Contributing
 
@@ -59,6 +60,10 @@ Contributions to ChessMastery are welcome! Here's how you can contribute:
 - Submit a pull request to the main repository.
 
 Please ensure that your contributions adhere to the project's coding standards and guidelines.
+
+## Acknowledgments
+
+- [SFML Library](https://www.sfml-dev.org/) - Simple and Fast Multimedia Library.
 
 ## License
 

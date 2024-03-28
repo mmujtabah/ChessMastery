@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Queen.h"
 
-Queen::Queen(bool color, int x, int y) : ChessPiece(color, x, y)
+Queen::Queen(bool color, int x, int y) : ChessPiece(color, x, y, 5)
 {
 	if (color)
 	{

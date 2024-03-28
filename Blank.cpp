@@ -1,6 +1,6 @@
 #include "Blank.h"
 
-Blank::Blank(int x, int y) : ChessPiece(false, 0, 0)
+Blank::Blank(int x, int y) : ChessPiece(false, 0, 0, 0)
 {
     State = BLANK;
 }

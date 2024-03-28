@@ -125,65 +125,6 @@ void ChessBoard::initWindow()
 	}
 }
 
-// void ChessBoard::initWindow()
-// {
-// 	if (this->window == nullptr) // Check if window is not already created
-// 	{
-// 		this->desktopMode = sf::VideoMode::getDesktopMode();
-// 		this->screenWidth = desktopMode.width;
-// 		this->screenHeight = desktopMode.height;
-// 		this->window = new sf::RenderWindow(this->desktopMode, "Chess Mastery", sf::Style::Default);
-// 		this->window->setFramerateLimit(60);
-// 		this->CellSize = std::min(screenWidth, screenHeight) / 10.0f;
-// 		// Load Icon
-// 		if (!this->Icon.loadFromFile("assets/images/icon.png"))
-// 		{
-// 			std::cout << "Failed to load icon file";
-// 		}
-// 		this->window->setIcon(this->Icon.getSize().x, this->Icon.getSize().y, this->Icon.getPixelsPtr());
-// 		for (int i = 0; i < 2; ++i)
-// 		{
-// 			this->BackgroundTextures[i] = new sf::Texture;
-// 			std::string imageFile = "assets/images/bg" + std::to_string(i) + ".jpg";
-// 			if (!BackgroundTextures[i]->loadFromFile(imageFile))
-// 			{
-// 				std::cerr << "Failed to load font " << imageFile << "!" << std::endl;
-// 				return;
-// 			}
-// 		}
-// 		// Calculate the center of the window
-// 		float centerX = this->screenWidth / 2.0f;
-// 		float centerY = this->screenHeight / 2.0f;
-
-// 		// Set button size and color
-// 		float buttonWidth = 200; // Width of the buttons
-// 		float buttonHeight = 50; // Height of the buttons
-// 		playButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
-// 		exitButton.setSize(sf::Vector2f(buttonWidth, buttonHeight));
-// 		playButton.setFillColor(sf::Color::Green); // Set color of the button
-// 		exitButton.setFillColor(sf::Color::Red);   // Set color of the button
-
-// 		// Calculate positions for play button
-// 		playButton.setPosition(centerX - buttonWidth / 2, centerY - buttonHeight);
-
-// 		// Calculate positions for exit button
-// 		exitButton.setPosition(centerX - buttonWidth / 2, centerY);
-
-// 		// Calculate positions for play button text
-// 		playText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
-// 		playText.setCharacterSize(40);
-// 		playText.setFillColor(sf::Color::White); // Set color of the text
-// 		playText.setString("Play");
-// 		playText.setPosition(centerX - playText.getLocalBounds().width / 2, centerY - buttonHeight + (buttonHeight - playText.getLocalBounds().height) / 2);
-
-// 		// Calculate positions for exit button text
-// 		exitText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
-// 		exitText.setCharacterSize(40);
-// 		exitText.setFillColor(sf::Color::White); // Set color of the text
-// 		exitText.setString("Exit");
-// 		exitText.setPosition(centerX - exitText.getLocalBounds().width / 2, centerY + (buttonHeight - exitText.getLocalBounds().height) / 2);
-// 	}
-// }
 
 void ChessBoard::initFonts()
 {
