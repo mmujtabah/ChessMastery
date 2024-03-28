@@ -16,7 +16,6 @@ private:
 	float CellSize;
 	sf::Texture **BackgroundTextures;
 	sf::RenderWindow *window;
-	sf::VideoMode desktopMode;
 	sf::RectangleShape boardShape;
 	sf::RectangleShape playButton; // Declaration of play button
 	sf::RectangleShape exitButton; // Declaration of exit button
@@ -26,6 +25,7 @@ private:
 	sf::Text playText;		// New text for "Play" button
 	sf::Text exitText;		// New text for "Exit" button
 	bool playButtonPressed; // Flag to track if the "Play" button is pressed
+	sf::Vector2i highlighterPosition;
 
 public:
 	ChessBoard();
@@ -46,11 +46,7 @@ public:
 	void initFonts();
 	void initText();
 	void initWindow();
-	void handleWindowResize(const sf::Vector2u &size);
-	void handleMouseClick(const sf::Vector2i &mousePosition);
-	void handleMouseDrag(const sf::Vector2i &mousePosition);
-	void handleMouseRelease(const sf::Vector2i &mousePosition);
-	void updateWindowLayout();
+	void handleKeyPress(sf::Keyboard::Key key);
 	GameState getGameState();
 	virtual ~ChessBoard();
 };
