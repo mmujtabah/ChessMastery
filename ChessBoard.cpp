@@ -262,7 +262,7 @@ void ChessBoard::pollEvents()
 		}
 	}
 }
-
+//Hello
 void ChessBoard::handleMouseDrag(const sf::Vector2i &mousePosition)
 {
 	// Implement your logic for dragging pieces here
