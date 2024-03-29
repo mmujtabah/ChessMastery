@@ -174,6 +174,7 @@ void ChessBoard::handleKeyPress(sf::Keyboard::Key key)
 {
 	if (gameState == MENU)
 	{
+		
 		switch (key)
 		{
 		case sf::Keyboard::Up:
@@ -245,7 +246,7 @@ void ChessBoard::drawBoard()
 		yPos = playButton.getPosition().y + highlighterPosition.y * (playButton.getSize().y + 20);
 		highlighter.setSize(sf::Vector2f(playButton.getSize().x, playButton.getSize().y)); // Initialize highlighter size
 		highlighter.setPosition(xPos, yPos);
-		highlighter.setFillColor(sf::Color(255, 255, 0, 100)); // Semi-transparent yellow
+		highlighter.setFillColor(sf::Color(255, 255, 255, 100)); // Semi-transparent yellow
 		this->window->draw(highlighter);
 		break;
 	case PLAYING:
@@ -254,7 +255,7 @@ void ChessBoard::drawBoard()
 		BackgroundSprite.setScale(static_cast<float>(screenWidth) / BackgroundSprite.getLocalBounds().width, static_cast<float>(screenHeight) / BackgroundSprite.getLocalBounds().height);
 		this->window->draw(BackgroundSprite);
 		float leftMargin = (this->window->getSize().x - (10 * this->CellSize)) / 10;
-		float topMargin = (window->getSize().y - (8 * this->CellSize)) / 5;
+		float topMargin = (window->getSize().y - (8 * this->CellSize)) / 2;
 
 		// Draw cells
 		for (int i = 0; i < 8; i++)
