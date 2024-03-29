@@ -19,6 +19,7 @@ ChessBoard::ChessBoard() : event(), playButtonPressed(false)
 	this->endGame = false;
 	this->window = nullptr;
 	this->fonts = new sf::Font *[2];
+	this->sound_buffer = new sf::SoundBuffer *[5];
 	this->BackgroundTextures = new sf::Texture *[2];
 	this->initFonts();
 	this->initWindow();
@@ -74,7 +75,16 @@ void ChessBoard::initWindow()
 		// Load Icon
 		if (!this->Icon.loadFromFile("assets/images/icon.png"))
 		{
-			std::cout << "Failed to load icon file";
+			std::cerr << "Failed to load icon file";
+		}
+		for (int i = 0; i < 2; i++)
+		{
+			this->sound_buffer[i] = new sf::SoundBuffer; // Use index 'i'
+			std::string fileName = "assets/sounds/sound" + std::to_string(i) + ".wav";
+			if (!this->sound_buffer[i]->loadFromFile(fileName)) // Use index 'i'
+			{
+				std::cerr << "Failed to load sound file " << fileName << "!" << std::endl;
+			}
 		}
 		this->window->setIcon(this->Icon.getSize().x, this->Icon.getSize().y, this->Icon.getPixelsPtr());
 		for (int i = 0; i < 2; ++i)
@@ -83,7 +93,7 @@ void ChessBoard::initWindow()
 			std::string imageFile = "assets/images/bg" + std::to_string(i) + ".jpg";
 			if (!BackgroundTextures[i]->loadFromFile(imageFile))
 			{
-				std::cerr << "Failed to load font " << imageFile << "!" << std::endl;
+				std::cerr << "Failed to load image " << imageFile << "!" << std::endl;
 				return;
 			}
 		}
@@ -110,7 +120,7 @@ void ChessBoard::initWindow()
 		playText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
 		playText.setCharacterSize(40);
 		playText.setFillColor(sf::Color::White); // Set color of the text
-		playText.setString("PLAY");
+		playText.setString("P L A Y");
 		// Center the text within the button
 		playText.setPosition(playButton.getPosition() + sf::Vector2f((buttonWidth - playText.getLocalBounds().width) / 2, (buttonHeight - playText.getLocalBounds().height) / 2 - playText.getLocalBounds().top));
 
@@ -118,7 +128,7 @@ void ChessBoard::initWindow()
 		exitText.setFont(*fonts[0]); // Assuming you want to use the first font from the array
 		exitText.setCharacterSize(40);
 		exitText.setFillColor(sf::Color::White); // Set color of the text
-		exitText.setString("EXIT");
+		exitText.setString("E X I T");
 		// Center the text within the button
 		exitText.setPosition(exitButton.getPosition() + sf::Vector2f((buttonWidth - exitText.getLocalBounds().width) / 2, (buttonHeight - exitText.getLocalBounds().height) / 2 - exitText.getLocalBounds().top));
 	}
@@ -174,18 +184,22 @@ void ChessBoard::handleKeyPress(sf::Keyboard::Key key)
 {
 	if (gameState == MENU)
 	{
-		
+		sf::Sound sound;
+		sound.setBuffer(*sound_buffer[1]);
 		switch (key)
 		{
 		case sf::Keyboard::Up:
+			sound.play();
 			if (highlighterPosition.y > 0)
 				highlighterPosition.y--;
 			break;
 		case sf::Keyboard::Down:
+			sound.play();
 			if (highlighterPosition.y < 1) // Assuming two menu items (play and exit)
 				highlighterPosition.y++;
 			break;
-		case sf::Keyboard::Return:			// Enter key
+		case sf::Keyboard::Return: // Enter key
+			sound.play();
 			if (highlighterPosition.y == 0) // Play selected
 				gameState = PLAYING;
 			else // Exit selected
@@ -342,7 +356,19 @@ ChessBoard::~ChessBoard()
 			delete board[i][j];
 		}
 	}
+	if (sound_buffer != nullptr)
+	{
+		for (int i = 0; i < 2; ++i)
+		{
+			if (sound_buffer[i] != nullptr)
+			{
+				delete sound_buffer[i];
+			}
+		}
+		delete[] sound_buffer;
+	}
 	// Set pointers to null
 	window = nullptr;
 	fonts = nullptr;
+	sound_buffer = nullptr;
 }

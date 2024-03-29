@@ -22,6 +22,7 @@ private:
 	sf::Event event;
 	sf::Image Icon;
 	sf::Font **fonts;		// New font for menu buttons
+	sf::SoundBuffer **sound_buffer;
 	sf::Text playText;		// New text for "Play" button
 	sf::Text exitText;		// New text for "Exit" button
 	bool playButtonPressed; // Flag to track if the "Play" button is pressed
