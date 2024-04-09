@@ -1,10 +1,20 @@
 # all: compile link
-all : link
+
 # compile: 
-# 	g++ -c main.cpp -I"C:\msys64\SFML-2.6.1\include"
+# 	g++ -c ChessMastery.cpp -I"C:\Users\ghost\Documents\GitHub\ChessMastery\SFML\include"
+
+# link:
+# 	g++ ChessMastery.o -o ChessMastery -L"C:\Users\ghost\Documents\GitHub\ChessMastery\SFML\lib" -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
+
+# clean:
+# 	rm -f ChessMastery *.o
+all: compile link clean
+
+compile: 
+	g++ -c ChessMastery.cpp ChessWindow.cpp -I"SFML\include"
 
 link:
-#	g++ mian.cpp -o main -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
-	g++ ChessMastery.cpp ChessBoard.cpp Pawn.cpp King.cpp Queen.cpp Bishop.cpp Knight.cpp Rook.cpp Blank.cpp ChessPiece.cpp -o ChessMastery -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
+	g++ ChessMastery.o ChessWindow.o -o ChessMastery -L"SFML\lib" -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
+
 clean:
-	rm -f ChessMastery *.o
+	rm -f ChessMastery.o ChessWindow.o

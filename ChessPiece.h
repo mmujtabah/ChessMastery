@@ -1,29 +1,37 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <vector>
 
-class ChessPiece // abstact base class whose pointer is to be created
+enum class ChessPieceState
 {
-protected:
-    bool move; // For checking whether the piece has moved or not
-    int x, y, value;
-    bool color; // 1 for white, 0 for black
+    PIECE,
+    CAPTURED,
+    BLANK
+};
+
+struct Position
+{
+    int row, col;
+};
+
+class ChessPiece
+{
+private:
+    ChessPieceState pieceState;
+    std::vector<Position> validMoves;
+
 public:
-    enum PieceState
-    {
-        BLANK,
-        PIECE,
-        CAPTURED
-    };
-    PieceState State;
-    sf::Texture textures; // Add this member variable
-    sf::Sprite sprite;
-    virtual bool isValid(int xfrom, int yfrom, int xto, int yto, ChessPiece *board[8][8]); // Every derived class has its own unique function
-    ChessPiece(bool color, int x, int y, int value);
-    void setPosition(int x, int y);
-    int getX();
-    int getY();
-    int getValue();
-    void Print(int x, int y);
-    virtual PieceState getPieceState() = 0;
-    ~ChessPiece();
+    ChessPiece(ChessPieceState state) : pieceState(state) {}
+
+    // Getter and setter for piece state
+    ChessPieceState getPieceState() const { return pieceState; }
+    void setPieceState(ChessPieceState state) { pieceState = state; }
+
+    // Add a valid move to the list
+    void addValidMove(const Position &move) { validMoves.push_back(move); }
+
+    // Clear all valid moves
+    void clearValidMoves() { validMoves.clear(); }
+
+    // Get the list of valid moves
+    const std::vector<Position> &getValidMoves() const { return validMoves; }
 };

@@ -1,20 +1,18 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include "ChessBoard.h"
-
+#include "ChessWindow.h"
 
 int main()
 {
-    ChessBoard* obj = new ChessBoard(); // Allocate ChessBoard object on the heap
-    obj->initWindow();
+    ChessWindow *game = new ChessWindow();
+    game->initWindow();
 
-    while (obj->WindowIsOpen())
+    while (game->WindowIsOpen())
     {
-        obj->pollEvents();
-        obj->renderWindow();
-        obj->drawBoard();
-    } 
-    delete obj; // Deallocate ChessBoard object from the heap
+        game->windowUpdate();
+    }
+
+    delete game;
     return 0;
 }
