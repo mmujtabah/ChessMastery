@@ -83,7 +83,7 @@ void ChessWindow::drawMenu()
     sf::Vector2u windowSize = window->getSize();
     float centerX = windowSize.x / 2.0f;
     float centerY = windowSize.y / 2.0f;
-    float margin = 70.0f; // Adjust margin as needed
+    float margin = 70.0f;     // Adjust margin as needed
     float buttonSize = 40.0f; // Adjust button size as needed
 
     // Calculate total height of buttons
@@ -103,7 +103,6 @@ void ChessWindow::drawMenu()
     window->draw(exitButton);
 }
 
-
 void ChessWindow::pollEvents()
 {
     while (window->pollEvent(this->event))
@@ -111,7 +110,7 @@ void ChessWindow::pollEvents()
         switch (this->event.type)
         {
         case sf::Event::Closed:
-            window->close();
+            state = GameState::EXIT;
             break;
         case sf::Event::MouseButtonPressed:
             if (this->event.mouseButton.button == sf::Mouse::Left)
@@ -123,7 +122,7 @@ void ChessWindow::pollEvents()
     }
 }
 
-void ChessWindow::handleMouseClick(const sf::Vector2i& mousePosition)
+void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
 {
     if (state == GameState::MENU)
     {
@@ -139,17 +138,12 @@ void ChessWindow::handleMouseClick(const sf::Vector2i& mousePosition)
     }
     else if (state == GameState::PLAY)
     {
-
     }
 }
-
-
 
 void ChessWindow::drawBoard()
 {
     window->clear();
-
-
 }
 
 void ChessWindow::windowUpdate()
@@ -165,6 +159,12 @@ void ChessWindow::windowUpdate()
             drawBoard();
         }
         pollEvents();
+
+        if (state == GameState::EXIT)
+        {
+            window->close();
+        }
+
         window->display();
     }
 }

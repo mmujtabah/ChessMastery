@@ -16,6 +16,7 @@ private:
 	sf::SoundBuffer sound_buffers[4];
 	sf::Sound sounds[4];
     bool windowOpen;
+    bool playerTurn;
 public:
     enum class GameState
     {
