@@ -1,4 +1,5 @@
 #include "ChessWindow.h"
+#include "ChessPiece.h"
 #include <iostream>
 #define WIDTH 1000
 #define HEIGHT 600
@@ -143,7 +144,39 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
 
 void ChessWindow::drawBoard()
 {
+    // Clear the window
     window->clear();
+
+    // Draw background
+    sf::Sprite background(BackgroundTexture);
+    window->draw(background);
+
+    // Draw the chessboard
+    sf::RectangleShape square(sf::Vector2f(CellSize, CellSize));
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            square.setFillColor((i + j) % 2 == 0 ? sf::Color(239, 237, 209) : sf::Color(201, 128, 60)); // Alternating colors for chessboard
+            square.setPosition(j * CellSize, i * CellSize);
+            window->draw(square);
+        }
+    }
+
+    // // Draw the pieces
+    // for (int i = 0; i < 8; ++i)
+    // {
+    //     for (int j = 0; j < 8; ++j)
+    //     {
+    //         ChessPiece *piece = chessBoard[i][j];
+    //         if (piece != nullptr)
+    //         {
+    //             sf::Sprite pieceSprite(piece->getTexture());
+    //             pieceSprite.setPosition(j * CellSize, i * CellSize);
+    //             window->draw(pieceSprite);
+    //         }
+    //     }
+    // }
 }
 
 void ChessWindow::windowUpdate()

@@ -4,19 +4,19 @@
 class ChessWindow
 {
 private:
-    sf::RenderWindow * window;
+    sf::RenderWindow *window;
     unsigned int width, height;
     float CellSize;
-	sf::Texture BackgroundTexture;
+    sf::Texture BackgroundTexture;
     sf::Sprite playButton, exitButton;
-	sf::RectangleShape boardCells;
-	sf::Event event;
-	sf::Image Icon;
-	sf::Font fonts[2];		
-	sf::SoundBuffer sound_buffers[4];
-	sf::Sound sounds[4];
+    sf::Event event;
+    sf::Image Icon;
+    sf::Font fonts[2];
+    sf::SoundBuffer sound_buffers[4];
+    sf::Sound sounds[4];
     bool windowOpen;
     bool playerTurn;
+
 public:
     enum class GameState
     {

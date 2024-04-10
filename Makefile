@@ -11,10 +11,10 @@
 all: compile link clean
 
 compile: 
-	g++ -c ChessMastery.cpp ChessWindow.cpp -I"SFML\include"
+	g++ -c ChessMastery.cpp ChessWindow.cpp ChessPiece.cpp -I"SFML\include"
 
 link:
-	g++ ChessMastery.o ChessWindow.o -o ChessMastery -L"SFML\lib" -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
+	g++ ChessMastery.o ChessWindow.o ChessPiece.o -o ChessMastery -L"SFML\lib" -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
 
 clean:
-	rm -f ChessMastery.o ChessWindow.o
+	rm -f ChessMastery.o ChessWindow.o ChessPiece.o
