@@ -2,7 +2,7 @@
 #include "ChessPiece.h"
 #include <iostream>
 #define WIDTH 1000
-#define HEIGHT 600
+#define HEIGHT 680
 
 ChessWindow::ChessWindow() : state(GameState::MENU), window(nullptr) { initWindow(); }
 
@@ -123,7 +123,7 @@ void ChessWindow::pollEvents()
     }
 }
 
-void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
+void ChessWindow::handleMouseClick(const sf::Vector2i& mousePosition)
 {
     if (state == GameState::MENU)
     {
@@ -139,8 +139,25 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
     }
     else if (state == GameState::PLAY)
     {
+        float leftMargin = (window->getSize().x - (10 * this->CellSize)) / 10;
+        float topMargin = (window->getSize().y - (9 * this->CellSize)) / 2;
+        float rightMargin = leftMargin + 8 * this->CellSize;
+        float bottomMargin = topMargin + 8 * this->CellSize;
+
+        // Check if the click falls within the bounds of the chessboard
+        if (mousePosition.x >= leftMargin && mousePosition.x <= rightMargin &&
+            mousePosition.y >= topMargin && mousePosition.y <= bottomMargin)
+        {
+            // Calculate row and column indices of the clicked cell
+            int row = (mousePosition.y - topMargin) / CellSize;
+            int col = (mousePosition.x - leftMargin) / CellSize;
+
+            // Print the indices
+            std::cout << "Clicked cell: Row = " << row << ", Column = " << col << std::endl;
+        }
     }
 }
+
 
 void ChessWindow::drawBoard()
 {
@@ -150,7 +167,7 @@ void ChessWindow::drawBoard()
     // Draw background
     sf::Sprite background(BackgroundTexture);
     window->draw(background);
-
+    float leftMargin = (window->getSize().x - (10 * this->CellSize)) / 10, topMargin = (window->getSize().y - (9 * this->CellSize)) / 2;
     // Draw the chessboard
     sf::RectangleShape square(sf::Vector2f(CellSize, CellSize));
     for (int i = 0; i < 8; ++i)
@@ -158,7 +175,8 @@ void ChessWindow::drawBoard()
         for (int j = 0; j < 8; ++j)
         {
             square.setFillColor((i + j) % 2 == 0 ? sf::Color(239, 237, 209) : sf::Color(201, 128, 60)); // Alternating colors for chessboard
-            square.setPosition(j * CellSize, i * CellSize);
+            float PositionX = leftMargin + j * CellSize, PositionY = topMargin + i * CellSize;
+            square.setPosition(PositionX, PositionY);                               // Adjust position based on parameters
             window->draw(square);
         }
     }
