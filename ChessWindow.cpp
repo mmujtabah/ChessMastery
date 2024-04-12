@@ -13,7 +13,9 @@ void ChessWindow::initWindow()
 {
     if (window == nullptr)
     {
-        window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Chess Mastery", sf::Style::Close | sf::Style::Titlebar);
+        sf::ContextSettings settings;
+        settings.antialiasingLevel = 20; // Adjust the level as needed
+        window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Chess Mastery", sf::Style::Close | sf::Style::Titlebar, settings);
         window->setFramerateLimit(60);
         width = window->getSize().x;
         height = window->getSize().y;
@@ -176,7 +178,7 @@ void ChessWindow::drawBoard()
     {
         for (int j = 0; j < 8; ++j)
         {
-            square.setFillColor((i + j) % 2 == 0 ? sf::Color(239, 237, 209) : sf::Color(201, 128, 60)); // Alternating colors for chessboard
+            square.setFillColor((i + j) % 2 == 0 ? sf::Color(239, 237, 209) : sf::Color(226, 170, 35)); // Alternating colors for chessboard
             float PositionX = leftMargin + j * CellSize, PositionY = topMargin + i * CellSize;
             square.setPosition(PositionX, PositionY); // Adjust position based on parameters
             window->draw(square);
@@ -215,7 +217,7 @@ void ChessWindow::windowUpdate()
             window->close();
         }
 
-        window->display();
+        renderWindow();
     }
 }
 

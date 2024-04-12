@@ -33,6 +33,7 @@ void King::setTexture()
                       << "assets/images/bk.png" << std::endl;
         }
     }
+    texture.setSmooth(true);
 }
 
 void Queen::setTexture()
@@ -51,6 +52,7 @@ void Queen::setTexture()
             std::cerr << "Failed to load texture: assets/images/bq.png" << std::endl;
         }
     }
+    texture.setSmooth(true);
 }
 
 void Rook::setTexture()
@@ -69,6 +71,7 @@ void Rook::setTexture()
             std::cerr << "Failed to load texture: assets/images/br.png" << std::endl;
         }
     }
+    texture.setSmooth(true);
 }
 
 void Bishop::setTexture()
@@ -87,6 +90,7 @@ void Bishop::setTexture()
             std::cerr << "Failed to load texture: assets/images/bb.png" << std::endl;
         }
     }
+    texture.setSmooth(true);
 }
 
 void Knight::setTexture()
@@ -105,6 +109,7 @@ void Knight::setTexture()
             std::cerr << "Failed to load texture: assets/images/bn.png" << std::endl;
         }
     }
+    texture.setSmooth(true);
 }
 
 void Pawn::setTexture()
@@ -123,6 +128,7 @@ void Pawn::setTexture()
             std::cerr << "Failed to load texture: assets/images/bp.png" << std::endl;
         }
     }
+    texture.setSmooth(true);
 }
 
 bool King::ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const
