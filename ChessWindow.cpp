@@ -4,7 +4,10 @@
 #define WIDTH 1000
 #define HEIGHT 680
 
-ChessWindow::ChessWindow() : state(GameState::MENU), window(nullptr) { initWindow(); }
+ChessWindow::ChessWindow(const ChessBoard &board) : state(GameState::MENU), window(nullptr), chessBoard(board)
+{
+    initWindow();
+}
 
 void ChessWindow::initWindow()
 {
@@ -123,7 +126,7 @@ void ChessWindow::pollEvents()
     }
 }
 
-void ChessWindow::handleMouseClick(const sf::Vector2i& mousePosition)
+void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
 {
     if (state == GameState::MENU)
     {
@@ -158,7 +161,6 @@ void ChessWindow::handleMouseClick(const sf::Vector2i& mousePosition)
     }
 }
 
-
 void ChessWindow::drawBoard()
 {
     // Clear the window
@@ -176,25 +178,22 @@ void ChessWindow::drawBoard()
         {
             square.setFillColor((i + j) % 2 == 0 ? sf::Color(239, 237, 209) : sf::Color(201, 128, 60)); // Alternating colors for chessboard
             float PositionX = leftMargin + j * CellSize, PositionY = topMargin + i * CellSize;
-            square.setPosition(PositionX, PositionY);                               // Adjust position based on parameters
+            square.setPosition(PositionX, PositionY); // Adjust position based on parameters
             window->draw(square);
+
+            // Draw the pieces
+            ChessPiece *piece = chessBoard.getPieceAt(Position(i, j));
+            if (piece != nullptr)
+            {
+                sf::Sprite pieceSprite(piece->texture);
+                pieceSprite.setPosition(PositionX, PositionY);
+                // Adjust the scale of the piece
+                float scaleFactor = CellSize / pieceSprite.getLocalBounds().width;
+                pieceSprite.setScale(scaleFactor, scaleFactor);
+                window->draw(pieceSprite);
+            }
         }
     }
-
-    // // Draw the pieces
-    // for (int i = 0; i < 8; ++i)
-    // {
-    //     for (int j = 0; j < 8; ++j)
-    //     {
-    //         ChessPiece *piece = chessBoard[i][j];
-    //         if (piece != nullptr)
-    //         {
-    //             sf::Sprite pieceSprite(piece->getTexture());
-    //             pieceSprite.setPosition(j * CellSize, i * CellSize);
-    //             window->draw(pieceSprite);
-    //         }
-    //     }
-    // }
 }
 
 void ChessWindow::windowUpdate()

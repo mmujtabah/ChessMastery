@@ -11,6 +11,7 @@ enum class ChessPieceState
 struct Position
 {
     int x, y;
+    Position(int _x, int _y) : x(_x), y(_y) {}
 };
 
 class ChessPiece
@@ -19,17 +20,20 @@ protected:
     ChessPieceState pieceState;
     std::vector<Position> validMoves;
     bool color; // White : 0, Black : 1
-    sf::Texture texture;
+    Position currentPosition;
 
 public:
-    ChessPiece(ChessPieceState state, bool color) : pieceState(state), color(color) {}
+    ChessPiece(bool color, int x, int y) : color(color), currentPosition({x, y}) {}
 
     // Getter and setter for piece state
     ChessPieceState getPieceState() const { return pieceState; }
-    // virtual void setPieceState(ChessPieceState state) { pieceState = state; }
+    void setPieceState(ChessPieceState state) { pieceState = state; }
 
     // Add a valid move to the list
-    // virtual void addValidMove(const Position &move) { validMoves.push_back(move); }
+    void addValidMove(const Position &move) { validMoves.push_back(move); }
+
+    // Check a move if it is valid
+    virtual bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const = 0;
 
     // Clear all valid moves
     void clearValidMoves() { validMoves.clear(); }
@@ -38,8 +42,13 @@ public:
     const std::vector<Position> &getValidMoves() const { return validMoves; }
 
     virtual void setTexture() = 0;
-    bool getColor() { return color; };
+    bool getColor() const { return color; };
 
+    // Getter and setter for current position
+    Position getCurrentPosition() const { return currentPosition; }
+    void setCurrentPosition(const Position &pos) { currentPosition = pos; }
+
+    sf::Texture texture;
     virtual ~ChessPiece();
 };
 
@@ -47,52 +56,108 @@ class King : public ChessPiece
 {
 private:
 public:
-    King(ChessPieceState state, bool color) : ChessPiece(state, color) { setTexture(); }
+    King(bool color, int x, int y) : ChessPiece(color, x, y)
+    {
+        pieceState = ChessPieceState::PIECE;
+        setTexture();
+    }
     ~King();
     void setTexture() override;
+    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Queen : public ChessPiece
 {
 private:
 public:
-    Queen(ChessPieceState state, bool color) : ChessPiece(state, color) { setTexture(); }
+    Queen(bool color, int x, int y) : ChessPiece(color, x, y)
+    {
+        pieceState = ChessPieceState::PIECE;
+        setTexture();
+    }
     ~Queen();
     void setTexture() override;
+    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Rook : public ChessPiece
 {
 private:
 public:
-    Rook(ChessPieceState state, bool color) : ChessPiece(state, color) { setTexture(); }
+    Rook(bool color, int x, int y) : ChessPiece(color, x, y)
+    {
+        pieceState = ChessPieceState::PIECE;
+        setTexture();
+    }
     ~Rook();
     void setTexture() override;
+    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Bishop : public ChessPiece
 {
 private:
 public:
-    Bishop(ChessPieceState state, bool color) : ChessPiece(state, color) { setTexture(); }
+    Bishop(bool color, int x, int y) : ChessPiece(color, x, y)
+    {
+        pieceState = ChessPieceState::PIECE;
+        setTexture();
+    }
     ~Bishop();
     void setTexture() override;
+    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Knight : public ChessPiece
 {
 private:
 public:
-    Knight(ChessPieceState state, bool color) : ChessPiece(state, color) { setTexture(); }
+    Knight(bool color, int x, int y) : ChessPiece(color, x, y)
+    {
+        pieceState = ChessPieceState::PIECE;
+        setTexture();
+    }
     ~Knight();
     void setTexture() override;
+    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Pawn : public ChessPiece
 {
 private:
 public:
-    Pawn(ChessPieceState state, bool color) : ChessPiece(state, color) { setTexture(); }
+    Pawn(bool color, int x, int y) : ChessPiece(color, x, y)
+    {
+        pieceState = ChessPieceState::PIECE;
+        setTexture();
+    }
     ~Pawn();
     void setTexture() override;
+    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
+};
+
+class Blank : public ChessPiece
+{
+private:
+public:
+    Blank(bool color = 0, int x = 0, int y = 0) : ChessPiece(color, x, y) { pieceState = ChessPieceState::BLANK; }
+    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override { return false; }
+    void setTexture() override {}
+    ~Blank() {}
+};
+
+class ChessBoard
+{
+private:
+    std::vector<std::vector<ChessPiece *>> board;
+
+public:
+    ChessBoard();
+    ~ChessBoard();
+    // Getter for the board
+    const std::vector<std::vector<ChessPiece *>> &getBoard() const { return board; }
+    // Function to move a piece on the board
+    void movePiece(const Position &from, const Position &to);
+    // Function to get a piece at a specific position on the board
+    ChessPiece *getPieceAt(const Position &pos) const;
 };

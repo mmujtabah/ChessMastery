@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "ChessPiece.h"
 class ChessWindow
 {
 private:
@@ -16,6 +17,7 @@ private:
     sf::Sound sounds[4];
     bool windowOpen;
     bool playerTurn;
+    const ChessBoard &chessBoard;
 
 public:
     enum class GameState
@@ -25,7 +27,7 @@ public:
         EXIT
     };
     GameState state;
-    ChessWindow();
+    ChessWindow(const ChessBoard &board);
     ~ChessWindow();
     void initWindow();
     void drawMenu();

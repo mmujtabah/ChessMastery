@@ -2,10 +2,12 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include "ChessWindow.h"
+#include "ChessPiece.h"
 
 int main()
 {
-    ChessWindow *game = new ChessWindow();
+    ChessBoard board;
+    ChessWindow *game = new ChessWindow(board);
     game->initWindow();
 
     while (game->WindowIsOpen())
