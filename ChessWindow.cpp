@@ -14,7 +14,7 @@ void ChessWindow::initWindow()
     if (window == nullptr)
     {
         sf::ContextSettings settings;
-        settings.antialiasingLevel = 20; // Adjust the level as needed
+        settings.antialiasingLevel = 16; // Adjust the level as needed
         window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Chess Mastery", sf::Style::Close | sf::Style::Titlebar, settings);
         window->setFramerateLimit(60);
         width = window->getSize().x;
