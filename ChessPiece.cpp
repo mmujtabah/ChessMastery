@@ -202,10 +202,51 @@ std::vector<Position> Bishop::getValidMoves(const std::vector<std::vector<ChessP
 {
     std::vector<Position> validMoves;
 
-    // Implement logic to calculate valid moves for the bishop
+    // Current position of the bishop
+    int currentRow = currentPosition.x;
+    int currentCol = currentPosition.y;
+
+    // Directions for diagonal movement (four diagonals)
+    int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+
+    // Iterate over each direction
+    for (const auto &dir : directions)
+    {
+        int rowDir = dir[0];
+        int colDir = dir[1];
+
+        // Move along the diagonal until edge of the board or another piece is encountered
+        for (int i = 1; i <= 7; ++i)
+        {
+            int newRow = currentRow + i * rowDir;
+            int newCol = currentCol + i * colDir;
+
+            // Check if the new position is within the board boundaries
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8)
+            {
+                // Check if the new position is empty or contains an opponent's piece
+                if (dynamic_cast<Blank *>(board[newRow][newCol]) != nullptr || board[newRow][newCol]->getColor() != this->color && dynamic_cast<King *>(board[newRow][newCol]) == nullptr)
+                {
+                    validMoves.push_back(Position(newRow, newCol));
+                }
+
+                // If there's a piece blocking the diagonal, stop moving in that direction
+                if (dynamic_cast<Blank *>(board[newRow][newCol]) == nullptr )
+                {
+                    break;
+                }
+            }
+            else
+            {
+                // If the new position is outside the board boundaries, stop moving in that direction
+                break;
+            }
+        }
+    }
 
     return validMoves;
 }
+
 
 std::vector<Position> Knight::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
 {
