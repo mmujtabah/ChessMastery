@@ -5,7 +5,7 @@
 #define WIDTH 1000
 #define HEIGHT 680
 
-ChessWindow::ChessWindow(ChessBoard &board) : state(GameState::MENU), window(nullptr), chessBoard(board), selectedPiece(nullptr)
+ChessWindow::ChessWindow(ChessBoard &board) : state(GameState::MENU), window(nullptr), chessBoard(board), selectedPiece(nullptr), playerTurn(0)
 {
     initWindow();
 }
@@ -160,6 +160,7 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
 
             if (clickedPiece != nullptr)
             {
+
                 if (!selectedPiece)
                 {
                     selectedPiece = clickedPiece;
@@ -167,13 +168,16 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                     // Get valid moves for the selected piece
                     validMoves.clear();
                     validMoves = selectedPiece->getValidMoves(chessBoard.getBoard());
-                    // std::cout << "Valid Moves:" << std::endl;
-                    // for (const auto &move : validMoves)
-                    // {
-                    //     std::cout << "(" << move.x << ", " << move.y << ")" << std::endl;
-                    // }
                     // Draw circles at valid moves
-                    drawCircle(validMoves, leftMargin, topMargin, rightMargin, bottomMargin);
+                    if (playerTurn == clickedPiece->getColor() || std::find(validMoves.begin(), validMoves.end(), Position(row, col)) != validMoves.end())
+                    {
+
+                        drawCircle(validMoves, leftMargin, topMargin, rightMargin, bottomMargin);
+                    }
+                    else
+                    {
+                        validMoves.clear();
+                    }
                 }
                 else
                 {
@@ -192,6 +196,8 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                         }
                         // Move is valid, update the position of the piece on the board
                         chessBoard.movePiece(selectedPiece->getCurrentPosition(), move);
+                        // Switch player turn
+                        playerTurn = (playerTurn == 0) ? 1 : 0;
                         printMove(row, col);
                         chessBoard.updateBlank(const_cast<std::vector<std::vector<ChessPiece *>> &>(chessBoard.getBoard()));
 
@@ -199,19 +205,25 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                         window->clear();
                         drawBoard();
                     }
-                    else
-                    {
-                        // Move is invalid, notify the player
-                        std::cout << "Invalid move\n";
-                    }
+                    // else
+                    // {
+                    //     // Move is invalid, notify the player
+                    //     std::cout << "Invalid move\n";
+                    // }
 
                     selectedPiece = nullptr;
                 }
             }
             else
             {
+                // std::cout << "It's not your turn\n";
                 selectedPiece = nullptr;
             }
+        }
+        else
+        {
+            // std::cout << "No piece found\n";
+            selectedPiece = nullptr;
         }
     }
 }
@@ -382,7 +394,7 @@ void ChessWindow::printMove(int row, int col)
     int chessRow = 8 - row;
 
     // Print the chess notation move
-    std::cout << "Chess Notation Move: " << chessColumn << chessRow << std::endl;
+    std::cout << chessColumn << chessRow << " ";
 }
 
 void ChessWindow::drawCapturedPieces()
