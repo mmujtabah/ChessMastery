@@ -199,6 +199,93 @@ bool Pawn::ValidMove(const Position &move, const std::vector<std::vector<ChessPi
     return false;
 }
 
+std::vector<Position> King::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
+{
+    std::vector<Position> validMoves;
+
+    // Implement logic to calculate valid moves for the king
+
+    return validMoves;
+}
+
+std::vector<Position> Queen::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
+{
+    std::vector<Position> validMoves;
+
+    // Implement logic to calculate valid moves for the queen
+
+    return validMoves;
+}
+
+std::vector<Position> Rook::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
+{
+    std::vector<Position> validMoves;
+
+    // Implement logic to calculate valid moves for the rook
+
+    return validMoves;
+}
+
+std::vector<Position> Bishop::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
+{
+    std::vector<Position> validMoves;
+
+    // Implement logic to calculate valid moves for the bishop
+
+    return validMoves;
+}
+
+std::vector<Position> Knight::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
+{
+    std::vector<Position> validMoves;
+
+    // Implement logic to calculate valid moves for the knight
+
+    return validMoves;
+}
+
+std::vector<Position> Pawn::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
+{
+    std::vector<Position> validMoves;
+
+    // Determine the direction of movement based on the pawn's color
+    int Direction = (getColor() == 0) ? -1 : 1; // For white pawns, move up (decrease y), for black pawns, move down (increase y)
+
+    // Check one square forward
+    Position forwardOne(getCurrentPosition().x + Direction, getCurrentPosition().y);
+    if (isOnBoard(forwardOne) && dynamic_cast<Blank *>(board[forwardOne.x][forwardOne.y]) != nullptr)
+    {
+        validMoves.push_back(forwardOne);
+
+        // Check two squares forward if pawn hasn't moved yet
+        if ((getColor() == 0 && getCurrentPosition().x == 6) || (getColor() == 1 && getCurrentPosition().x == 1))
+        {
+            Position forwardTwo(getCurrentPosition().x + 2 * Direction, getCurrentPosition().y);
+            if (dynamic_cast<Blank *>(board[forwardTwo.x][forwardTwo.y]) != nullptr)
+            {
+                validMoves.push_back(forwardTwo);
+            }
+        }
+    }
+
+    // Check diagonal captures
+    std::vector<Position> diagonalMoves = {{Direction, -1}, {Direction, 1}};
+    for (const auto &move : diagonalMoves)
+    {
+        Position target(getCurrentPosition().x + move.x, getCurrentPosition().y + move.y);
+        if (isOnBoard(target))
+        {
+            ChessPiece *targetPiece = board[target.x][target.y];
+            if (targetPiece != nullptr && targetPiece->getColor() != getColor())
+            {
+                validMoves.push_back(target);
+            }
+        }
+    }
+
+    return validMoves;
+}
+
 // Implementation of getPieceAt member function
 ChessPiece *ChessBoard::getPieceAt(const Position &pos) const
 {

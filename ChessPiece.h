@@ -12,6 +12,10 @@ struct Position
 {
     int x, y;
     Position(int _x, int _y) : x(_x), y(_y) {}
+    bool operator==(const Position &other) const
+    {
+        return x == other.x && y == other.y;
+    }
 };
 
 class ChessPiece
@@ -33,13 +37,15 @@ public:
     void addValidMove(const Position &move) { validMoves.push_back(move); }
 
     // Check a move if it is valid
-    virtual bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const = 0;
+    virtual bool ValidMove(const Position &Current, const std::vector<std::vector<ChessPiece *>> &board) const = 0;
 
+    // Get valid moves
+    virtual std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const = 0;
     // Clear all valid moves
     void clearValidMoves() { validMoves.clear(); }
 
     // Get the list of valid moves
-    const std::vector<Position> &getValidMoves() const { return validMoves; }
+    //const std::vector<Position> &getValidMoves() const { return validMoves; }
 
     virtual void setTexture() = 0;
     bool getColor() const { return color; };
@@ -48,6 +54,10 @@ public:
     Position getCurrentPosition() const { return currentPosition; }
     void setCurrentPosition(const Position &pos) { currentPosition = pos; }
 
+    bool isOnBoard(const Position &pos) const
+    {
+        return pos.x >= 0 && pos.x < 8 && pos.y >= 0 && pos.y < 8;
+    }
     sf::Texture texture;
     virtual ~ChessPiece();
 };
@@ -64,6 +74,7 @@ public:
     ~King();
     void setTexture() override;
     bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
+    std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Queen : public ChessPiece
@@ -78,6 +89,7 @@ public:
     ~Queen();
     void setTexture() override;
     bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
+    std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Rook : public ChessPiece
@@ -92,6 +104,7 @@ public:
     ~Rook();
     void setTexture() override;
     bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
+    std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Bishop : public ChessPiece
@@ -106,6 +119,7 @@ public:
     ~Bishop();
     void setTexture() override;
     bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
+    std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Knight : public ChessPiece
@@ -120,6 +134,7 @@ public:
     ~Knight();
     void setTexture() override;
     bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
+    std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Pawn : public ChessPiece
@@ -134,6 +149,7 @@ public:
     ~Pawn();
     void setTexture() override;
     bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
+    std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
 class Blank : public ChessPiece
@@ -141,9 +157,10 @@ class Blank : public ChessPiece
 private:
 public:
     Blank(bool color = 0, int x = 0, int y = 0) : ChessPiece(color, x, y) { pieceState = ChessPieceState::BLANK; }
-    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override { return false; }
-    void setTexture() override {}
     ~Blank() {}
+    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override { return false; }
+    std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override { return {}; }
+    void setTexture() override {}
 };
 
 class ChessBoard

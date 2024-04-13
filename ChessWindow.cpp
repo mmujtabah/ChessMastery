@@ -1,6 +1,7 @@
 #include "ChessWindow.h"
 #include "ChessPiece.h"
 #include <iostream>
+#include <cstring>
 #define WIDTH 1000
 #define HEIGHT 680
 
@@ -149,76 +150,114 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
         float rightMargin = leftMargin + 8 * this->CellSize;
         float bottomMargin = topMargin + 8 * this->CellSize;
 
-        // Check if the click falls within the bounds of the chessboard
         if (mousePosition.x >= leftMargin && mousePosition.x <= rightMargin &&
             mousePosition.y >= topMargin && mousePosition.y <= bottomMargin)
         {
-            // Calculate row and column indices of the clicked cell
             int row = (mousePosition.y - topMargin) / CellSize;
             int col = (mousePosition.x - leftMargin) / CellSize;
 
-            // Print the indices
-            std::cout << "Clicked cell: Row = " << row << ", Column = " << col << std::endl;
-            // Get the chess piece at the clicked cell
             ChessPiece *clickedPiece = chessBoard.getPieceAt(Position(row, col));
 
             if (clickedPiece != nullptr)
             {
-                // Piece exists at the clicked cell
                 if (!selectedPiece)
                 {
-                    // If no piece is selected, select the clicked piece
                     selectedPiece = clickedPiece;
-                    std::cout << "Selected Piece: \n";
+
+                    // Get valid moves for the selected piece
+                    validMoves = selectedPiece->getValidMoves(chessBoard.getBoard());
+
+                    // Draw circles at valid moves
+                    drawCircle(validMoves, leftMargin, topMargin, rightMargin, bottomMargin);
                 }
                 else
                 {
-                    // If a piece is already selected, attempt to move it to the clicked cell
                     Position move(row, col);
-                    if (selectedPiece->ValidMove(move, chessBoard.getBoard()))
+                    if (std::find(validMoves.begin(), validMoves.end(), move) != validMoves.end())
                     {
                         // Move is valid, update the position of the piece on the board
                         chessBoard.movePiece(selectedPiece->getCurrentPosition(), move);
                         printMove(row, col);
+                        sounds[1].play();
                         chessBoard.updateBlank(const_cast<std::vector<std::vector<ChessPiece *>> &>(chessBoard.getBoard()));
+
+                        // Clear the circles after a valid move
+                        window->clear();
+                        drawBoard();
                     }
                     else
                     {
                         // Move is invalid, notify the player
-                        std::cout << "Invalid move for \n";
+                        std::cout << "Invalid move\n";
                     }
 
-                    // Deselect the piece after attempting the move
                     selectedPiece = nullptr;
                 }
             }
             else
             {
-                // Clicked cell is empty, deselect any selected piece
                 selectedPiece = nullptr;
             }
         }
     }
 }
 
+void ChessWindow::drawCircle(const std::vector<Position> &validMoves, float leftMargin, float topMargin, float rightMargin, float bottomMargin)
+{
+    // Calculate the size of the circle based on the cell size
+    float radius = CellSize / 6;
+
+    // Adjust the radius if the circle extends beyond the window boundaries
+    float maxRadius = std::min(std::min(CellSize / 2, (rightMargin - leftMargin) / 20), (bottomMargin - topMargin) / 16);
+    if (radius > maxRadius)
+    {
+        radius = maxRadius;
+    }
+
+    // Create the circle shape
+    sf::CircleShape circle(radius);
+
+    // Set transparency (alpha value) of the circle
+    circle.setFillColor(sf::Color(104, 104, 104, 100)); // Change the last parameter (100) for transparency
+
+    // Increase the number of points for smoother edges
+    circle.setPointCount(30); // Adjust the number of points as needed
+
+    // Iterate over each valid move and draw a circle at the corresponding position
+    for (const auto &move : validMoves)
+    {
+        // Calculate the center position of the circle for the current move
+        float centerX = leftMargin + (move.y * CellSize) + CellSize / 2;
+        float centerY = topMargin + (move.x * CellSize) + CellSize / 2;
+
+        // Position the circle
+        circle.setPosition(centerX - radius, centerY - radius);
+
+        // Draw the circle
+        window->draw(circle);
+    }
+}
+
 void ChessWindow::drawBoard()
 {
-    // Clear the window
-    window->clear();
+    // Clear only the part of the window where the board is drawn
+    window->clear(sf::Color::Transparent);
 
-    // Draw background
+    // Draw the background
     sf::Sprite background(BackgroundTexture);
     window->draw(background);
+
     float leftMargin = (window->getSize().x - (10 * this->CellSize)) / 10, topMargin = (window->getSize().y - (9 * this->CellSize)) / 2;
-    // Draw the chessboard
+
+    // Draw the chessboard squares
     sf::RectangleShape square(sf::Vector2f(CellSize, CellSize));
     for (int i = 0; i < 8; ++i)
     {
         for (int j = 0; j < 8; ++j)
         {
-            square.setFillColor((i + j) % 2 == 0 ? sf::Color(239, 237, 209) : sf::Color(226, 170, 35)); // Alternating colors for chessboard
+            square.setFillColor((i + j) % 2 == 0 ? sf::Color(239, 237, 209) : sf::Color(226, 170, 35));
             float PositionX = leftMargin + j * CellSize, PositionY = topMargin + i * CellSize;
-            square.setPosition(PositionX, PositionY); // Adjust position based on parameters
+            square.setPosition(PositionX, PositionY);
             window->draw(square);
 
             // Draw the pieces
@@ -227,12 +266,17 @@ void ChessWindow::drawBoard()
             {
                 sf::Sprite pieceSprite(piece->texture);
                 pieceSprite.setPosition(PositionX, PositionY);
-                // Adjust the scale of the piece
                 float scaleFactor = CellSize / pieceSprite.getLocalBounds().width;
                 pieceSprite.setScale(scaleFactor, scaleFactor);
                 window->draw(pieceSprite);
             }
         }
+    }
+
+    // Draw circles for valid moves if a piece is selected
+    if (selectedPiece != nullptr)
+    {
+        drawCircle(validMoves, leftMargin, topMargin, leftMargin + 8 * CellSize, topMargin + 8 * CellSize);
     }
 }
 
@@ -281,9 +325,6 @@ void ChessWindow::playSound(int index)
 {
     sounds[index].play();
 }
-
-#include <iostream>
-#include <string>
 
 void ChessWindow::printMove(int row, int col)
 {

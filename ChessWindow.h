@@ -19,6 +19,7 @@ private:
     bool playerTurn;
     ChessBoard &chessBoard;
     ChessPiece *selectedPiece;
+    std::vector<Position> validMoves;
 public:
     enum class GameState
     {
@@ -33,6 +34,7 @@ public:
     void drawMenu();
     void drawBoard();
     void printMove(int row, int col);
+    void drawCircle(const std::vector<Position> &validMoves, float leftMargin, float topMargin, float rightMargin, float bottomMargin);
     void windowUpdate();
     void playSound(int index);
     void pollEvents();
