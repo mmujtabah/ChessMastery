@@ -182,7 +182,7 @@ std::vector<Position> Rook::getValidMoves(const std::vector<std::vector<ChessPie
                 validMoves.push_back(currentPosition);
             }
             // If the position contains an opponent's piece, add it as a valid move and stop searching in this direction
-            else if (targetPiece->getColor() != getColor())
+            else if (targetPiece->getColor() != getColor() && dynamic_cast<King *>(targetPiece) == nullptr)
             {
                 validMoves.push_back(currentPosition);
                 break;
@@ -249,7 +249,7 @@ std::vector<Position> Pawn::getValidMoves(const std::vector<std::vector<ChessPie
         {
             ChessPiece *targetPiece = board[target.x][target.y];
             // Ensure the target position is not empty and contains an opponent's piece
-            if (dynamic_cast<Blank *>(targetPiece) == nullptr && targetPiece->getColor() != getColor())
+            if (dynamic_cast<Blank *>(targetPiece) == nullptr && targetPiece->getColor() != getColor() && dynamic_cast<King *>(targetPiece) == nullptr)
             {
                 validMoves.push_back(target);
             }
