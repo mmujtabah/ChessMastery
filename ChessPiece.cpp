@@ -211,7 +211,29 @@ std::vector<Position> Knight::getValidMoves(const std::vector<std::vector<ChessP
 {
     std::vector<Position> validMoves;
 
-    // Implement logic to calculate valid moves for the knight
+    int currentRow = currentPosition.x;
+    int currentCol = currentPosition.y;
+
+    // Define possible move offsets for a knight
+    std::vector<std::pair<int, int>> offsets = {
+        {-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
+
+    // Check each possible move
+    for (const auto &offset : offsets)
+    {
+        int newRow = currentRow + offset.first;
+        int newCol = currentCol + offset.second;
+
+        // Check if the new position is within the board bounds
+        if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8)
+        {
+            // Check if the new position is empty or contains an opponent's piece
+            if (dynamic_cast<Blank *>(board[newRow][newCol]) != nullptr || (board[newRow][newCol]->getColor() != color && dynamic_cast<King *>(board[newRow][newCol]) == nullptr))
+            {
+                validMoves.emplace_back(newRow, newCol);
+            }
+        }
+    }
 
     return validMoves;
 }

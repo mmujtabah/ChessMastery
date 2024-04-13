@@ -167,7 +167,11 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                     // Get valid moves for the selected piece
                     validMoves.clear();
                     validMoves = selectedPiece->getValidMoves(chessBoard.getBoard());
-
+                    // std::cout << "Valid Moves:" << std::endl;
+                    // for (const auto &move : validMoves)
+                    // {
+                    //     std::cout << "(" << move.x << ", " << move.y << ")" << std::endl;
+                    // }
                     // Draw circles at valid moves
                     drawCircle(validMoves, leftMargin, topMargin, rightMargin, bottomMargin);
                 }
