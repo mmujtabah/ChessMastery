@@ -131,74 +131,6 @@ void Pawn::setTexture()
     texture.setSmooth(true);
 }
 
-bool King::ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const
-{
-    int dx = move.x - getCurrentPosition().x;
-    int dy = move.y - getCurrentPosition().y;
-    return (abs(dx) <= 1 && abs(dy) <= 1);
-}
-
-bool Queen::ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const
-{
-    return false;
-}
-
-bool Rook::ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const
-{
-    return false;
-}
-
-bool Bishop::ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const
-{
-    return false;
-}
-
-bool Knight::ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const
-{
-    return false;
-}
-
-bool Pawn::ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const
-{
-    // Get the current position of the pawn
-    Position currentPos = getCurrentPosition();
-
-    // Determine the direction of movement based on the pawn's color
-    int direction = getColor() == 0 ? -1 : 1; // For white pawns, move up (decrease y), for black pawns, move down (increase y)
-
-    // Check if the move is one step forward
-    if (move.x == currentPos.x + direction && move.y == currentPos.y)
-    {
-        // Check if the destination square is empty
-        if (dynamic_cast<Blank *>(board[move.x][move.y]) != nullptr)
-        {
-            return true; // Valid move: empty square ahead
-        }
-    }
-    // Check if the pawn is making its initial double-step move
-    else if (currentPos.x == (getColor() == 0 ? 6 : 1) && move.x == currentPos.x + 2 * direction && move.y == currentPos.y)
-    {
-        // Check if both the destination square and the square in between are empty
-        if (dynamic_cast<Blank *>(board[move.x][move.y]) != nullptr && currentPos.x + direction >= 0 && currentPos.x + direction < 8 && dynamic_cast<Blank *>(board[currentPos.x + direction][currentPos.y]) != nullptr)
-        {
-            return true; // Valid move: empty squares ahead
-        }
-    }
-    // Check if the pawn is capturing diagonally
-    else if (abs(move.x - currentPos.x) == 1 && (move.y == currentPos.y + direction || move.y == currentPos.y - direction))
-    {
-        // Check if there is an opponent's piece to capture
-        ChessPiece *targetPiece = board[move.x][move.y];
-        if (targetPiece != nullptr && targetPiece->getColor() != getColor() && dynamic_cast<Blank *>(targetPiece) == nullptr)
-        {
-            return true; // Valid move: capturing an opponent's piece diagonally
-        }
-    }
-
-    // If none of the conditions are met, the move is not valid
-    return false;
-}
-
 std::vector<Position> King::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
 {
     std::vector<Position> validMoves;
@@ -355,7 +287,8 @@ ChessBoard::~ChessBoard()
 void ChessBoard::movePiece(const Position &from, const Position &to)
 {
     ChessPiece *pieceToMove = board[from.x][from.y];
-    if (pieceToMove && pieceToMove->ValidMove(to, board))
+    std::vector<Position> validMoves = pieceToMove->getValidMoves(board); // Get valid moves for the piece
+    if (pieceToMove && std::find(validMoves.begin(), validMoves.end(), to) != validMoves.end())
     {
         // Valid move, update the board
         board[to.x][to.y] = pieceToMove;

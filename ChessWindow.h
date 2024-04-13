@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "ChessPiece.h"
+#include <vector>
 class ChessWindow
 {
 private:
@@ -20,6 +21,8 @@ private:
     ChessBoard &chessBoard;
     ChessPiece *selectedPiece;
     std::vector<Position> validMoves;
+    std::vector<ChessPiece *> capturedPieces;
+
 public:
     enum class GameState
     {
@@ -33,6 +36,7 @@ public:
     void initWindow();
     void drawMenu();
     void drawBoard();
+    void drawCapturedPieces();
     void printMove(int row, int col);
     void drawCircle(const std::vector<Position> &validMoves, float leftMargin, float topMargin, float rightMargin, float bottomMargin);
     void windowUpdate();

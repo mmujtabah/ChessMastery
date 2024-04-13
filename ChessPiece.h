@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 enum class ChessPieceState
 {
     PIECE,
@@ -36,16 +37,11 @@ public:
     // Add a valid move to the list
     void addValidMove(const Position &move) { validMoves.push_back(move); }
 
-    // Check a move if it is valid
-    virtual bool ValidMove(const Position &Current, const std::vector<std::vector<ChessPiece *>> &board) const = 0;
-
     // Get valid moves
     virtual std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const = 0;
+
     // Clear all valid moves
     void clearValidMoves() { validMoves.clear(); }
-
-    // Get the list of valid moves
-    //const std::vector<Position> &getValidMoves() const { return validMoves; }
 
     virtual void setTexture() = 0;
     bool getColor() const { return color; };
@@ -59,6 +55,8 @@ public:
         return pos.x >= 0 && pos.x < 8 && pos.y >= 0 && pos.y < 8;
     }
     sf::Texture texture;
+    void capture() { pieceState = ChessPieceState::CAPTURED; } // Update state to CAPTURED
+
     virtual ~ChessPiece();
 };
 
@@ -73,7 +71,6 @@ public:
     }
     ~King();
     void setTexture() override;
-    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
     std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
@@ -88,7 +85,6 @@ public:
     }
     ~Queen();
     void setTexture() override;
-    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
     std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
@@ -103,7 +99,6 @@ public:
     }
     ~Rook();
     void setTexture() override;
-    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
     std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
@@ -118,7 +113,6 @@ public:
     }
     ~Bishop();
     void setTexture() override;
-    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
     std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
@@ -133,7 +127,6 @@ public:
     }
     ~Knight();
     void setTexture() override;
-    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
     std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
@@ -148,7 +141,6 @@ public:
     }
     ~Pawn();
     void setTexture() override;
-    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override;
     std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override;
 };
 
@@ -158,7 +150,6 @@ private:
 public:
     Blank(bool color = 0, int x = 0, int y = 0) : ChessPiece(color, x, y) { pieceState = ChessPieceState::BLANK; }
     ~Blank() {}
-    bool ValidMove(const Position &move, const std::vector<std::vector<ChessPiece *>> &board) const override { return false; }
     std::vector<Position> getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const override { return {}; }
     void setTexture() override {}
 };

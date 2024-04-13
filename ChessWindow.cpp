@@ -179,6 +179,7 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                         // Play sound based on whether a piece is moved or captured
                         if (dynamic_cast<Blank *>(chessBoard.getPieceAt(move)) == nullptr)
                         {
+                            capturedPieces.push_back(clickedPiece);
                             sounds[2].play(); // Piece captured
                         }
                         else
@@ -188,7 +189,6 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                         // Move is valid, update the position of the piece on the board
                         chessBoard.movePiece(selectedPiece->getCurrentPosition(), move);
                         printMove(row, col);
-                        // sounds[1].play();
                         chessBoard.updateBlank(const_cast<std::vector<std::vector<ChessPiece *>> &>(chessBoard.getBoard()));
 
                         // Clear the circles after a valid move
@@ -288,6 +288,9 @@ void ChessWindow::drawBoard()
     {
         drawCircle(validMoves, leftMargin, topMargin, leftMargin + 8 * CellSize, topMargin + 8 * CellSize);
     }
+
+    // Draw captured pieces
+    drawCapturedPieces();
 }
 
 void ChessWindow::windowUpdate()
@@ -376,6 +379,27 @@ void ChessWindow::printMove(int row, int col)
 
     // Print the chess notation move
     std::cout << "Chess Notation Move: " << chessColumn << chessRow << std::endl;
+}
+
+void ChessWindow::drawCapturedPieces()
+{
+    // Calculate the size of each captured piece based on the cell size
+    float pieceSize = CellSize * 0.8f;
+
+    // Calculate the position for drawing captured pieces at the extreme right of the window
+    float leftMargin = window->getSize().x - pieceSize - 10.0f; // Adjust this value as needed
+    float topMargin = (window->getSize().y - (capturedPieces.size() * pieceSize)) / 2;
+
+    // Iterate over captured pieces and draw them vertically
+    for (size_t i = 0; i < capturedPieces.size(); ++i)
+    {
+        ChessPiece *piece = capturedPieces[i];
+        sf::Sprite pieceSprite(piece->texture);
+        pieceSprite.setPosition(leftMargin, topMargin + i * pieceSize);
+        float scaleFactor = pieceSize / pieceSprite.getLocalBounds().width;
+        pieceSprite.setScale(scaleFactor, scaleFactor);
+        window->draw(pieceSprite);
+    }
 }
 
 ChessWindow::~ChessWindow()
