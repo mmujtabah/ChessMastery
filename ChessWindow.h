@@ -32,6 +32,7 @@ public:
     void initWindow();
     void drawMenu();
     void drawBoard();
+    void printMove(int row, int col);
     void windowUpdate();
     void playSound(int index);
     void pollEvents();

@@ -179,8 +179,8 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                     {
                         // Move is valid, update the position of the piece on the board
                         chessBoard.movePiece(selectedPiece->getCurrentPosition(), move);
-                        std::cout << "Moved  to cell (" << row << ", " << col << ")" << std::endl;
-                        chessBoard.updateBlank(const_cast<std::vector<std::vector<ChessPiece *>>&>(chessBoard.getBoard()));
+                        printMove(row, col);
+                        chessBoard.updateBlank(const_cast<std::vector<std::vector<ChessPiece *>> &>(chessBoard.getBoard()));
                     }
                     else
                     {
@@ -280,6 +280,51 @@ void ChessWindow::renderWindow()
 void ChessWindow::playSound(int index)
 {
     sounds[index].play();
+}
+
+#include <iostream>
+#include <string>
+
+void ChessWindow::printMove(int row, int col)
+{
+    // Convert column index to chess notation (a-h)
+    std::string chessColumn;
+    switch (col)
+    {
+    case 0:
+        chessColumn = "a";
+        break;
+    case 1:
+        chessColumn = "b";
+        break;
+    case 2:
+        chessColumn = "c";
+        break;
+    case 3:
+        chessColumn = "d";
+        break;
+    case 4:
+        chessColumn = "e";
+        break;
+    case 5:
+        chessColumn = "f";
+        break;
+    case 6:
+        chessColumn = "g";
+        break;
+    case 7:
+        chessColumn = "h";
+        break;
+    default:
+        chessColumn = "?";
+        break;
+    }
+
+    // Convert row index to chess notation (1-8)
+    int chessRow = 8 - row;
+
+    // Print the chess notation move
+    std::cout << "Chess Notation Move: " << chessColumn << chessRow << std::endl;
 }
 
 ChessWindow::~ChessWindow()
