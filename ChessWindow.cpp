@@ -4,7 +4,7 @@
 #define WIDTH 1000
 #define HEIGHT 680
 
-ChessWindow::ChessWindow(const ChessBoard &board) : state(GameState::MENU), window(nullptr), chessBoard(board)
+ChessWindow::ChessWindow(ChessBoard &board) : state(GameState::MENU), window(nullptr), chessBoard(board), selectedPiece(nullptr)
 {
     initWindow();
 }
@@ -159,6 +159,44 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
 
             // Print the indices
             std::cout << "Clicked cell: Row = " << row << ", Column = " << col << std::endl;
+            // Get the chess piece at the clicked cell
+            ChessPiece *clickedPiece = chessBoard.getPieceAt(Position(row, col));
+
+            if (clickedPiece != nullptr)
+            {
+                // Piece exists at the clicked cell
+                if (!selectedPiece)
+                {
+                    // If no piece is selected, select the clicked piece
+                    selectedPiece = clickedPiece;
+                    std::cout << "Selected Piece: \n";
+                }
+                else
+                {
+                    // If a piece is already selected, attempt to move it to the clicked cell
+                    Position move(row, col);
+                    if (selectedPiece->ValidMove(move, chessBoard.getBoard()))
+                    {
+                        // Move is valid, update the position of the piece on the board
+                        chessBoard.movePiece(selectedPiece->getCurrentPosition(), move);
+                        std::cout << "Moved  to cell (" << row << ", " << col << ")" << std::endl;
+                        chessBoard.updateBlank(const_cast<std::vector<std::vector<ChessPiece *>>&>(chessBoard.getBoard()));
+                    }
+                    else
+                    {
+                        // Move is invalid, notify the player
+                        std::cout << "Invalid move for \n";
+                    }
+
+                    // Deselect the piece after attempting the move
+                    selectedPiece = nullptr;
+                }
+            }
+            else
+            {
+                // Clicked cell is empty, deselect any selected piece
+                selectedPiece = nullptr;
+            }
         }
     }
 }

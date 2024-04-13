@@ -164,10 +164,10 @@ bool Pawn::ValidMove(const Position &move, const std::vector<std::vector<ChessPi
     Position currentPos = getCurrentPosition();
 
     // Determine the direction of movement based on the pawn's color
-    int direction = getColor() ? -1 : 1; // For white pawns, move up (decrease y), for black pawns, move down (increase y)
+    int direction = getColor() == 0 ? -1 : 1; // For white pawns, move up (decrease y), for black pawns, move down (increase y)
 
     // Check if the move is one step forward
-    if (move.x == currentPos.x && move.y == currentPos.y + direction)
+    if (move.x == currentPos.x + direction && move.y == currentPos.y)
     {
         // Check if the destination square is empty
         if (dynamic_cast<Blank *>(board[move.x][move.y]) != nullptr)
@@ -176,16 +176,16 @@ bool Pawn::ValidMove(const Position &move, const std::vector<std::vector<ChessPi
         }
     }
     // Check if the pawn is making its initial double-step move
-    else if (currentPos.y == 1 && move.x == currentPos.x && move.y == currentPos.y + 2 * direction)
+    else if (currentPos.x == (getColor() == 0 ? 6 : 1) && move.x == currentPos.x + 2 * direction && move.y == currentPos.y)
     {
         // Check if both the destination square and the square in between are empty
-        if (board[move.x][move.y] == nullptr && board[currentPos.x][currentPos.y + direction] == nullptr)
+        if (dynamic_cast<Blank *>(board[move.x][move.y]) != nullptr && currentPos.x + direction >= 0 && currentPos.x + direction < 8 && dynamic_cast<Blank *>(board[currentPos.x + direction][currentPos.y]) != nullptr)
         {
             return true; // Valid move: empty squares ahead
         }
     }
     // Check if the pawn is capturing diagonally
-    else if (abs(move.x - currentPos.x) == 1 && move.y == currentPos.y + direction)
+    else if (abs(move.x - currentPos.x) == 1 && (move.y == currentPos.y + direction || move.y == currentPos.y - direction))
     {
         // Check if there is an opponent's piece to capture
         ChessPiece *targetPiece = board[move.x][move.y];
@@ -234,23 +234,21 @@ ChessBoard::ChessBoard()
         board[1][i] = new Pawn(1, 1, i);
 
     // Add white pieces
-    board[7][0] = new Rook(0, 0, 0);
-    board[7][1] = new Knight(0, 0, 1);
+    board[7][0] = new Rook(0, 7, 0);
+    board[7][1] = new Knight(0, 7, 1);
     board[7][2] = new Bishop(0, 0, 2);
-    board[7][3] = new Queen(0, 0, 3);
-    board[7][4] = new King(0, 0, 4);
-    board[7][5] = new Bishop(0, 0, 5);
-    board[7][6] = new Knight(0, 0, 6);
-    board[7][7] = new Rook(0, 0, 7);
+    board[7][3] = new Queen(0, 7, 3);
+    board[7][4] = new King(0, 7, 4);
+    board[7][5] = new Bishop(0, 7, 5);
+    board[7][6] = new Knight(0, 7, 6);
+    board[7][7] = new Rook(0, 7, 7);
 
     // Add white pawns...
     for (int i = 0; i < 8; i++)
-        board[6][i] = new Pawn(0, 1, i);
+        board[6][i] = new Pawn(0, 6, i);
 
     // Add blank pieces
-    for (int i = 2; i < 6; i++)
-        for (int j = 0; j < 8; j++)
-            board[i][j] = new Blank(0, i, j);
+    updateBlank(board);
 }
 
 ChessBoard::~ChessBoard()
@@ -275,5 +273,20 @@ void ChessBoard::movePiece(const Position &from, const Position &to)
         board[to.x][to.y] = pieceToMove;
         board[from.x][from.y] = nullptr;
         pieceToMove->setCurrentPosition(to);
+    }
+}
+
+void ChessBoard::updateBlank(std::vector<std::vector<ChessPiece *>> &board) const
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            if (board[i][j] == nullptr)
+            {
+                // If the cell is empty, initialize a new Blank object and assign it
+                board[i][j] = new Blank(0, i, j);
+            }
+        }
     }
 }

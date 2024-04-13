@@ -17,8 +17,8 @@ private:
     sf::Sound sounds[4];
     bool windowOpen;
     bool playerTurn;
-    const ChessBoard &chessBoard;
-
+    ChessBoard &chessBoard;
+    ChessPiece *selectedPiece;
 public:
     enum class GameState
     {
@@ -27,7 +27,7 @@ public:
         EXIT
     };
     GameState state;
-    ChessWindow(const ChessBoard &board);
+    ChessWindow(ChessBoard &board);
     ~ChessWindow();
     void initWindow();
     void drawMenu();
