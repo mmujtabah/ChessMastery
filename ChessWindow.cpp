@@ -165,6 +165,7 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                     selectedPiece = clickedPiece;
 
                     // Get valid moves for the selected piece
+                    validMoves.clear();
                     validMoves = selectedPiece->getValidMoves(chessBoard.getBoard());
 
                     // Draw circles at valid moves
@@ -175,10 +176,19 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                     Position move(row, col);
                     if (std::find(validMoves.begin(), validMoves.end(), move) != validMoves.end())
                     {
+                        // Play sound based on whether a piece is moved or captured
+                        if (dynamic_cast<Blank *>(chessBoard.getPieceAt(move)) == nullptr)
+                        {
+                            sounds[2].play(); // Piece captured
+                        }
+                        else
+                        {
+                            sounds[1].play(); // Piece moved
+                        }
                         // Move is valid, update the position of the piece on the board
                         chessBoard.movePiece(selectedPiece->getCurrentPosition(), move);
                         printMove(row, col);
-                        sounds[1].play();
+                        // sounds[1].play();
                         chessBoard.updateBlank(const_cast<std::vector<std::vector<ChessPiece *>> &>(chessBoard.getBoard()));
 
                         // Clear the circles after a valid move

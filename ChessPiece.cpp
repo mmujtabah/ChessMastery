@@ -249,10 +249,10 @@ std::vector<Position> Pawn::getValidMoves(const std::vector<std::vector<ChessPie
     std::vector<Position> validMoves;
 
     // Determine the direction of movement based on the pawn's color
-    int Direction = (getColor() == 0) ? -1 : 1; // For white pawns, move up (decrease y), for black pawns, move down (increase y)
+    int direction = (getColor() == 0) ? -1 : 1; // For white pawns, move up (decrease y), for black pawns, move down (increase y)
 
     // Check one square forward
-    Position forwardOne(getCurrentPosition().x + Direction, getCurrentPosition().y);
+    Position forwardOne(getCurrentPosition().x + direction, getCurrentPosition().y);
     if (isOnBoard(forwardOne) && dynamic_cast<Blank *>(board[forwardOne.x][forwardOne.y]) != nullptr)
     {
         validMoves.push_back(forwardOne);
@@ -260,7 +260,7 @@ std::vector<Position> Pawn::getValidMoves(const std::vector<std::vector<ChessPie
         // Check two squares forward if pawn hasn't moved yet
         if ((getColor() == 0 && getCurrentPosition().x == 6) || (getColor() == 1 && getCurrentPosition().x == 1))
         {
-            Position forwardTwo(getCurrentPosition().x + 2 * Direction, getCurrentPosition().y);
+            Position forwardTwo(getCurrentPosition().x + 2 * direction, getCurrentPosition().y);
             if (dynamic_cast<Blank *>(board[forwardTwo.x][forwardTwo.y]) != nullptr)
             {
                 validMoves.push_back(forwardTwo);
@@ -269,14 +269,15 @@ std::vector<Position> Pawn::getValidMoves(const std::vector<std::vector<ChessPie
     }
 
     // Check diagonal captures
-    std::vector<Position> diagonalMoves = {{Direction, -1}, {Direction, 1}};
+    std::vector<Position> diagonalMoves = {{direction, -1}, {direction, 1}};
     for (const auto &move : diagonalMoves)
     {
         Position target(getCurrentPosition().x + move.x, getCurrentPosition().y + move.y);
         if (isOnBoard(target))
         {
             ChessPiece *targetPiece = board[target.x][target.y];
-            if (targetPiece != nullptr && targetPiece->getColor() != getColor())
+            // Ensure the target position is not empty and contains an opponent's piece
+            if (dynamic_cast<Blank *>(targetPiece) == nullptr && targetPiece->getColor() != getColor())
             {
                 validMoves.push_back(target);
             }
