@@ -153,7 +153,47 @@ std::vector<Position> Rook::getValidMoves(const std::vector<std::vector<ChessPie
 {
     std::vector<Position> validMoves;
 
-    // Implement logic to calculate valid moves for the rook
+    // Define the directions in which the rook can move (vertical and horizontal)
+    std::vector<Position> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    // Check each direction
+    for (const auto &dir : directions)
+    {
+        // Start from the rook's current position
+        Position currentPosition = getCurrentPosition();
+
+        // Move in the current direction until reaching the edge of the board or encountering a piece
+        while (true)
+        {
+            // Move to the next position in the direction
+            currentPosition.x += dir.x;
+            currentPosition.y += dir.y;
+
+            // Check if the new position is on the board
+            if (!isOnBoard(currentPosition))
+                break;
+
+            // Get the piece at the new position
+            ChessPiece *targetPiece = board[currentPosition.x][currentPosition.y];
+
+            // If the position is empty, add it as a valid move
+            if (dynamic_cast<Blank *>(targetPiece) != nullptr)
+            {
+                validMoves.push_back(currentPosition);
+            }
+            // If the position contains an opponent's piece, add it as a valid move and stop searching in this direction
+            else if (targetPiece->getColor() != getColor())
+            {
+                validMoves.push_back(currentPosition);
+                break;
+            }
+            // If the position contains the player's own piece, stop searching in this direction
+            else
+            {
+                break;
+            }
+        }
+    }
 
     return validMoves;
 }
