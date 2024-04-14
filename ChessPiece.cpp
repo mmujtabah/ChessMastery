@@ -205,7 +205,6 @@ std::vector<Position> Bishop::getValidMoves(const std::vector<std::vector<ChessP
     // Current position of the bishop
     int currentRow = currentPosition.x;
     int currentCol = currentPosition.y;
-
     // Directions for diagonal movement (four diagonals)
     int directions[4][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
@@ -224,15 +223,19 @@ std::vector<Position> Bishop::getValidMoves(const std::vector<std::vector<ChessP
             // Check if the new position is within the board boundaries
             if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8)
             {
-                // Check if the new position is empty or contains an opponent's piece
-                if (dynamic_cast<Blank *>(board[newRow][newCol]) != nullptr || board[newRow][newCol]->getColor() != this->color && dynamic_cast<King *>(board[newRow][newCol]) == nullptr)
+                // Check if the new position is empty
+                if (dynamic_cast<Blank *>(board[newRow][newCol]) != nullptr)
                 {
                     validMoves.push_back(Position(newRow, newCol));
                 }
-
-                // If there's a piece blocking the diagonal, stop moving in that direction
-                if (dynamic_cast<Blank *>(board[newRow][newCol]) == nullptr )
+                else
                 {
+                    // Check if the piece at the new position is an opponent's piece (and not a king)
+                    if (board[newRow][newCol]->getColor() != this->color && !dynamic_cast<King *>(board[newRow][newCol]))
+                    {
+                        validMoves.push_back(Position(newRow, newCol));
+                    }
+                    // Stop moving in this direction if any piece is encountered
                     break;
                 }
             }
@@ -246,7 +249,6 @@ std::vector<Position> Bishop::getValidMoves(const std::vector<std::vector<ChessP
 
     return validMoves;
 }
-
 
 std::vector<Position> Knight::getValidMoves(const std::vector<std::vector<ChessPiece *>> &board) const
 {
@@ -359,7 +361,7 @@ ChessBoard::ChessBoard()
     // Add white pieces
     board[7][0] = new Rook(0, 7, 0);
     board[7][1] = new Knight(0, 7, 1);
-    board[7][2] = new Bishop(0, 0, 2);
+    board[7][2] = new Bishop(0, 7, 2);
     board[7][3] = new Queen(0, 7, 3);
     board[7][4] = new King(0, 7, 4);
     board[7][5] = new Bishop(0, 7, 5);
