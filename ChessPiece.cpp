@@ -144,7 +144,17 @@ std::vector<Position> Queen::getValidMoves(const std::vector<std::vector<ChessPi
 {
     std::vector<Position> validMoves;
 
-    // Implement logic to calculate valid moves for the queen
+    // Create instances of Rook and Bishop
+    Rook rook(color, currentPosition.x, currentPosition.y);
+    Bishop bishop(color, currentPosition.x, currentPosition.y);
+
+    // Get valid moves for rook and bishop
+    std::vector<Position> rookMoves = rook.getValidMoves(board);
+    std::vector<Position> bishopMoves = bishop.getValidMoves(board);
+
+    // Combine the valid moves from both sources
+    validMoves.insert(validMoves.end(), rookMoves.begin(), rookMoves.end());
+    validMoves.insert(validMoves.end(), bishopMoves.begin(), bishopMoves.end());
 
     return validMoves;
 }
