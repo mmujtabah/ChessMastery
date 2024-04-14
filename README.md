@@ -39,7 +39,7 @@ To install ChessMastery, follow these steps:
 
 3. Compile the source code:
 
-   ```g++ ChessMastery.cpp ChessBoard.cpp Pawn.cpp King.cpp Queen.cpp Bishop.cpp Knight.cpp Rook.cpp Blank.cpp ChessPiece.cpp -o ChessMastery -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network```
+   ```g++ ChessMastery.cpp ChessWindow.cpp ChessPiece.cpp -o ChessMastery -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network```
 
 4. Configure the project settings as needed.
 
