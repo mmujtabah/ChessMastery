@@ -320,6 +320,11 @@ void ChessWindow::windowUpdate()
         else if (state == GameState::PLAY)
         {
             drawBoard();
+            // Check if any pawns were promoted and play sound accordingly
+            if (chessBoard.promotePawns())
+            {
+                playSound(3);
+            }
         }
         pollEvents();
 

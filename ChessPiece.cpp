@@ -426,3 +426,30 @@ void ChessBoard::updateBlank(std::vector<std::vector<ChessPiece *>> &board) cons
         }
     }
 }
+
+bool ChessBoard::promotePawns()
+{
+    bool promoted = false;
+
+    // Check for pawns on the first and last row
+    for (int col = 0; col < 8; ++col)
+    {
+        // Check first row
+        if (dynamic_cast<Pawn *>(board[0][col]) != nullptr && board[0][col]->getColor() == 0)
+        {
+            delete board[0][col];
+            board[0][col] = new Queen(0, 0, col);
+            promoted = true;
+        }
+
+        // Check last row
+        if (dynamic_cast<Pawn *>(board[7][col]) != nullptr && board[7][col]->getColor() == 1)
+        {
+            delete board[7][col];
+            board[7][col] = new Queen(1, 7, col);
+            promoted = true;
+        }
+    }
+
+    return promoted;
+}

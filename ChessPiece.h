@@ -169,4 +169,5 @@ public:
     // Function to get a piece at a specific position on the board
     ChessPiece *getPieceAt(const Position &pos) const;
     void updateBlank(std::vector<std::vector<ChessPiece *>> &board) const;
+    bool promotePawns();
 };
