@@ -135,7 +135,31 @@ std::vector<Position> King::getValidMoves(const std::vector<std::vector<ChessPie
 {
     std::vector<Position> validMoves;
 
-    // Implement logic to calculate valid moves for the king
+    // Define the possible movements for the king using a vector of positions
+    const std::vector<Position> moves = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+
+    // Get the current position of the king
+    int currentRow = currentPosition.x;
+    int currentCol = currentPosition.y;
+
+    // Iterate over all possible moves for the king
+    for (const auto &move : moves)
+    {
+        int newRow = currentRow + move.x;
+        int newCol = currentCol + move.y;
+
+        // Check if the new position is within the board boundaries
+        if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8)
+        {
+            // Check if the new position is empty or contains an opponent's piece
+            ChessPiece *targetPiece = board[newRow][newCol];
+            if (dynamic_cast<Blank *>(targetPiece) != nullptr || (targetPiece->getColor() != color))
+            {
+                // Add the new position to the list of valid moves
+                validMoves.push_back(Position(newRow, newCol));
+            }
+        }
+    }
 
     return validMoves;
 }
@@ -192,7 +216,7 @@ std::vector<Position> Rook::getValidMoves(const std::vector<std::vector<ChessPie
                 validMoves.push_back(currentPosition);
             }
             // If the position contains an opponent's piece, add it as a valid move and stop searching in this direction
-            else if (targetPiece->getColor() != getColor() && dynamic_cast<King *>(targetPiece) == nullptr)
+            else if (targetPiece->getColor() != getColor())
             {
                 validMoves.push_back(currentPosition);
                 break;
@@ -240,8 +264,8 @@ std::vector<Position> Bishop::getValidMoves(const std::vector<std::vector<ChessP
                 }
                 else
                 {
-                    // Check if the piece at the new position is an opponent's piece (and not a king)
-                    if (board[newRow][newCol]->getColor() != this->color && !dynamic_cast<King *>(board[newRow][newCol]))
+                    // Check if the piece at the new position is an opponent's piece
+                    if (board[newRow][newCol]->getColor() != this->color)
                     {
                         validMoves.push_back(Position(newRow, newCol));
                     }
@@ -281,7 +305,7 @@ std::vector<Position> Knight::getValidMoves(const std::vector<std::vector<ChessP
         if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8)
         {
             // Check if the new position is empty or contains an opponent's piece
-            if (dynamic_cast<Blank *>(board[newRow][newCol]) != nullptr || (board[newRow][newCol]->getColor() != color && dynamic_cast<King *>(board[newRow][newCol]) == nullptr))
+            if (dynamic_cast<Blank *>(board[newRow][newCol]) != nullptr || (board[newRow][newCol]->getColor() != color))
             {
                 validMoves.emplace_back(newRow, newCol);
             }
@@ -324,7 +348,7 @@ std::vector<Position> Pawn::getValidMoves(const std::vector<std::vector<ChessPie
         {
             ChessPiece *targetPiece = board[target.x][target.y];
             // Ensure the target position is not empty and contains an opponent's piece
-            if (dynamic_cast<Blank *>(targetPiece) == nullptr && targetPiece->getColor() != getColor() && dynamic_cast<King *>(targetPiece) == nullptr)
+            if (dynamic_cast<Blank *>(targetPiece) == nullptr && targetPiece->getColor() != getColor())
             {
                 validMoves.push_back(target);
             }
@@ -430,7 +454,6 @@ void ChessBoard::updateBlank(std::vector<std::vector<ChessPiece *>> &board) cons
 bool ChessBoard::promotePawns()
 {
     bool promoted = false;
-
     // Check for pawns on the first and last row
     for (int col = 0; col < 8; ++col)
     {
@@ -441,7 +464,6 @@ bool ChessBoard::promotePawns()
             board[0][col] = new Queen(0, 0, col);
             promoted = true;
         }
-
         // Check last row
         if (dynamic_cast<Pawn *>(board[7][col]) != nullptr && board[7][col]->getColor() == 1)
         {
@@ -452,4 +474,44 @@ bool ChessBoard::promotePawns()
     }
 
     return promoted;
+}
+
+int ChessBoard::checkForKingCapture()
+{
+    bool whiteKingCaptured = true;
+    bool blackKingCaptured = true;
+
+    // Iterate over the board to find the kings
+    for (int row = 0; row < 8; ++row)
+    {
+        for (int col = 0; col < 8; ++col)
+        {
+            ChessPiece *piece = board[row][col];
+            if (dynamic_cast<King *>(piece) != nullptr)
+            {
+                // If a king is found, update the corresponding flag
+                if (piece->getColor() == 0)
+                    whiteKingCaptured = false;
+                else
+                    blackKingCaptured = false;
+            }
+        }
+    }
+
+    // If one of the kings is captured, print the winner and exit the program
+    if (whiteKingCaptured || blackKingCaptured)
+    {
+        if (whiteKingCaptured)
+        {
+            std::cout << "Black winner!" << std::endl;
+            return 1;
+        }
+        else
+        {
+            std::cout << "White winner!" << std::endl;
+            return 0;
+        }
+            
+    }
+    return -1;
 }

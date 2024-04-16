@@ -28,7 +28,7 @@ void ChessWindow::initWindow()
         }
         window->setIcon(Icon.getSize().x, Icon.getSize().y, Icon.getPixelsPtr());
         // Load Sounds
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < 6; ++i)
         {
             std::string fileName = "assets/sounds/sound" + std::to_string(i) + ".wav";
             if (!sound_buffers[i].loadFromFile(fileName))
@@ -320,6 +320,26 @@ void ChessWindow::windowUpdate()
         else if (state == GameState::PLAY)
         {
             drawBoard();
+            int gameEnd = chessBoard.checkForKingCapture();
+            if (gameEnd != -1)
+            {
+                if (!gameEnd)
+                {
+                    playSound(4);
+                }
+                else if (gameEnd)
+                {
+                    playSound(5);
+                }
+                // Use sf::Clock to wait for 5 seconds
+                sf::Clock timer;
+                while (timer.getElapsedTime().asSeconds() < 5)
+                {
+                    // Keep polling events to ensure responsiveness
+                    pollEvents();
+                }
+                state = GameState::EXIT;
+            }
             // Check if any pawns were promoted and play sound accordingly
             if (chessBoard.promotePawns())
             {

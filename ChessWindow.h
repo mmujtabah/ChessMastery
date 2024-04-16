@@ -14,8 +14,8 @@ private:
     sf::Event event;
     sf::Image Icon;
     sf::Font fonts[2];
-    sf::SoundBuffer sound_buffers[4];
-    sf::Sound sounds[4];
+    sf::SoundBuffer sound_buffers[6];
+    sf::Sound sounds[6];
     bool windowOpen;
     bool playerTurn;
     ChessBoard &chessBoard;
