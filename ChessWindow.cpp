@@ -238,7 +238,7 @@ void ChessWindow::drawCircle(const std::vector<Position> &validMoves, float left
     sf::CircleShape circle(radius);
 
     // Set transparency (alpha value) of the circle
-    circle.setFillColor(sf::Color(104, 104, 104, 100)); // Change the last parameter (100) for transparency
+    circle.setFillColor(sf::Color(0, 128, 255, 100)); // Change the last parameter (100) for transparency
 
     // Increase the number of points for smoother edges
     circle.setPointCount(30); // Adjust the number of points as needed
@@ -418,22 +418,78 @@ void ChessWindow::printMove(int row, int col)
 
 void ChessWindow::drawCapturedPieces()
 {
+    sf::Text blackTitle("Black Pieces", fonts[0], 20);
+    blackTitle.setFillColor(sf::Color::Green);
+    sf::Text whiteTitle("White Pieces", fonts[0], 20);
+    whiteTitle.setFillColor(sf::Color::Green);
+
     // Calculate the size of each captured piece based on the cell size
     float pieceSize = CellSize * 0.8f;
 
     // Calculate the position for drawing captured pieces at the extreme right of the window
-    float leftMargin = window->getSize().x - pieceSize - 10.0f; // Adjust this value as needed
-    float topMargin = (window->getSize().y - (capturedPieces.size() * pieceSize)) / 2;
+    float rightMargin = window->getSize().x - pieceSize - 10.0f; // Adjust this value as needed
+    float topMargin = 100.0f;                                    // Initial top margin
 
-    // Iterate over captured pieces and draw them vertically
-    for (size_t i = 0; i < capturedPieces.size(); ++i)
+    // Store the size of capturedPieces to avoid recalculating it multiple times
+    size_t capturedSize = capturedPieces.size();
+
+    // Draw black pieces title
+    blackTitle.setPosition(rightMargin - blackTitle.getLocalBounds().width - 80.0f, topMargin);
+    window->draw(blackTitle);
+
+    // Adjust top margin for the next drawing
+    topMargin += blackTitle.getLocalBounds().height + 20.0f; // Vertical margin after the title
+
+    // Draw black captured pieces
+    int count = 0; // Counter for pieces drawn in a row
+    for (size_t i = 0; i < capturedSize; ++i)
     {
         ChessPiece *piece = capturedPieces[i];
-        sf::Sprite pieceSprite(piece->texture);
-        pieceSprite.setPosition(leftMargin, topMargin + i * pieceSize);
-        float scaleFactor = pieceSize / pieceSprite.getLocalBounds().width;
-        pieceSprite.setScale(scaleFactor, scaleFactor);
-        window->draw(pieceSprite);
+        if (piece->getColor()) // Check if the piece is black
+        {
+            sf::Sprite pieceSprite(piece->texture);
+            int row = count / 5; // 5 pieces per row
+            int col = count % 5;
+            float xPos = rightMargin - (col + 1) * pieceSize;
+            float yPos = topMargin + row * pieceSize;
+            pieceSprite.setPosition(xPos, yPos);
+            float scaleFactor = pieceSize / pieceSprite.getLocalBounds().width;
+            pieceSprite.setScale(scaleFactor, scaleFactor);
+            window->draw(pieceSprite);
+
+            ++count;
+        }
+    }
+
+    // Adjust top margin for the next drawing
+    topMargin += ((count - 1) / 5 + 1) * pieceSize + 80.0f; // Vertical margin after drawing black pieces
+
+    // Draw white pieces title
+    whiteTitle.setPosition(rightMargin - whiteTitle.getLocalBounds().width - 80.0f, topMargin + 80);
+    window->draw(whiteTitle);
+
+    // Adjust top margin for the next drawing
+    topMargin += whiteTitle.getLocalBounds().height + 100.0f; // Vertical margin after the title
+
+    // Draw white captured pieces
+    count = 0; // Reset counter for pieces drawn in a row
+    for (size_t i = 0; i < capturedSize; ++i)
+    {
+        ChessPiece *piece = capturedPieces[i];
+        if (!piece->getColor()) // Check if the piece is white
+        {
+            sf::Sprite pieceSprite(piece->texture);
+            int row = count / 5; // 5 pieces per row
+            int col = count % 5;
+            float xPos = rightMargin - (col + 1) * pieceSize;
+            float yPos = topMargin + row * pieceSize;
+            pieceSprite.setPosition(xPos, yPos);
+            float scaleFactor = pieceSize / pieceSprite.getLocalBounds().width;
+            pieceSprite.setScale(scaleFactor, scaleFactor);
+            window->draw(pieceSprite);
+
+            ++count;
+        }
     }
 }
 
