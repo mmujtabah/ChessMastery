@@ -479,7 +479,7 @@ void ChessWindow::drawCapturedPieces()
         if (!piece->getColor()) // Check if the piece is white
         {
             sf::Sprite pieceSprite(piece->texture);
-            int row = count / 5; // 5 pieces per row
+            int row = count / 5;
             int col = count % 5;
             float xPos = rightMargin - (col + 1) * pieceSize;
             float yPos = topMargin + row * pieceSize;
