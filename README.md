@@ -15,10 +15,6 @@ ChessMastery is a chess-related project aimed at helping players improve their s
 ## Features
 
 - **Interactive Chess Board**: Provides an interactive chess board for users to play against each other.
-- **Tutorials and Lessons**: Offers tutorials and lessons for players at different skill levels to improve their understanding of chess strategies and tactics.
-- **Puzzles and Challenges**: Includes puzzles and challenges to test and enhance users' problem-solving skills.
-- **Performance Analysis**: Analyzes users' game performances and provides insights and suggestions for improvement.
-- **Community Interaction**: Allows users to interact with each other, share tips and strategies, and participate in chess-related discussions.
 
 ## Getting Started
 

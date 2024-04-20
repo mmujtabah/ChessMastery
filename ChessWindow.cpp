@@ -205,12 +205,6 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
                         window->clear();
                         drawBoard();
                     }
-                    // else
-                    // {
-                    //     // Move is invalid, notify the player
-                    //     std::cout << "Invalid move\n";
-                    // }
-
                     selectedPiece = nullptr;
                 }
             }
