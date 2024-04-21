@@ -476,7 +476,7 @@ bool ChessBoard::promotePawns()
     return promoted;
 }
 
-int ChessBoard::checkForKingCapture()
+bool ChessBoard::checkForKingCapture()
 {
     bool whiteKingCaptured = true;
     bool blackKingCaptured = true;
@@ -498,20 +498,11 @@ int ChessBoard::checkForKingCapture()
         }
     }
 
-    // If one of the kings is captured, print the winner and exit the program
+    // If one of the kings is captured, return true to indicate game over
     if (whiteKingCaptured || blackKingCaptured)
     {
-        if (whiteKingCaptured)
-        {
-            std::cout << "Black winner!" << std::endl;
-            return 1;
-        }
-        else
-        {
-            std::cout << "White winner!" << std::endl;
-            return 0;
-        }
-            
+        return true;
     }
-    return -1;
+
+    return false;
 }

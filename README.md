@@ -1,7 +1,7 @@
 # ChessMastery
 
 ## Overview
-ChessMastery is a chess-related project aimed at helping players improve their skills, offering various features and resources to enhance their mastery of the game.
+ChessMastery is a project developed as part of the second semester project for Object-Oriented Programming (OOP) at FAST-NUCES. Collaboratively completed with my project partner [Harris](https://github.com/MHarrisT). This project features various OOP aspects such as classes, pointers, inheritance, abstraction, and polymorphism.
 
 ## Table of Contents
 
@@ -14,7 +14,11 @@ ChessMastery is a chess-related project aimed at helping players improve their s
 
 ## Features
 
-- **Interactive Chess Board**: Provides an interactive chess board for users to play against each other.
+- **Interactive Chess Board**: Provides users with an interactive chess board for playing against each other.
+
+- **Interactive Sounds**: Engaging sounds are played when a piece is moved, captured, promoted, or to announce the winner.
+ 
+- **Mouse Handling**: Players can use their mouse to right-click a piece to view its valid moves and then left-click the desired chessboard cell to execute the move.
 
 ## Getting Started
 
@@ -35,7 +39,7 @@ To install ChessMastery, follow these steps:
 
 3. Compile the source code:
 
-   ```g++ ChessMastery.cpp ChessWindow.cpp ChessPiece.cpp -o ChessMastery -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network```
+   ```g++ ChessMastery.cpp ChessWindow.cpp ChessPiece.cpp -o ChessMastery -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio```
 
 4. Configure the project settings as needed.
 
@@ -44,6 +48,13 @@ To install ChessMastery, follow these steps:
 Run the compiled executable: `./ChessMastery`
 
 ## Gameplay
+
+ChessMastery offers a comprehensive gaming experience with the following features:
+
+- White pieces start the game, with players taking alternating turns.
+- Each turn, players can move only one piece of their color.
+- The game objective is to capture the opposing color's king to win.
+- Captured pieces are displayed on the left side of the window, organized by color.
 
 ## Contributing
 

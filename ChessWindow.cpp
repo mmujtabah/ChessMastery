@@ -117,7 +117,7 @@ void ChessWindow::pollEvents()
         switch (this->event.type)
         {
         case sf::Event::Closed:
-            state = GameState::EXIT;
+            window->close();
             break;
         case sf::Event::MouseButtonPressed:
             if (this->event.mouseButton.button == sf::Mouse::Left)
@@ -140,7 +140,7 @@ void ChessWindow::handleMouseClick(const sf::Vector2i &mousePosition)
         }
         else if (exitButton.getGlobalBounds().contains(mousePosition.x, mousePosition.y))
         {
-            state = GameState::EXIT;
+            window->close();
         }
     }
     else if (state == GameState::PLAY)
@@ -305,7 +305,7 @@ void ChessWindow::drawBoard()
 
 void ChessWindow::windowUpdate()
 {
-    while (window->isOpen() && state != GameState::EXIT)
+    while (window->isOpen())
     {
         if (state == GameState::MENU)
         {
@@ -314,25 +314,9 @@ void ChessWindow::windowUpdate()
         else if (state == GameState::PLAY)
         {
             drawBoard();
-            int gameEnd = chessBoard.checkForKingCapture();
-            if (gameEnd != -1)
+            if (chessBoard.checkForKingCapture())
             {
-                if (!gameEnd)
-                {
-                    playSound(4);
-                }
-                else if (gameEnd)
-                {
-                    playSound(5);
-                }
-                // Use sf::Clock to wait for 5 seconds
-                sf::Clock timer;
-                while (timer.getElapsedTime().asSeconds() < 5)
-                {
-                    // Keep polling events to ensure responsiveness
-                    pollEvents();
-                }
-                state = GameState::EXIT;
+                state = GameState::EXIT; // Set the game state to exit if king is captured
             }
             // Check if any pawns were promoted and play sound accordingly
             if (chessBoard.promotePawns())
@@ -344,7 +328,8 @@ void ChessWindow::windowUpdate()
 
         if (state == GameState::EXIT)
         {
-            window->close();
+            drawExit();
+            // renderWindow();
         }
 
         renderWindow();
@@ -371,6 +356,12 @@ void ChessWindow::renderWindow()
 
 void ChessWindow::playSound(int index)
 {
+    // Adjust volume based on the volumeFactor
+    float volumeFactor = 1000.1f;
+    float newVolume = sounds[index].getVolume() * volumeFactor;
+    sounds[index].setVolume(newVolume);
+
+    // Play the sound
     sounds[index].play();
 }
 
@@ -414,6 +405,7 @@ void ChessWindow::printMove(int row, int col)
 
     // Print the chess notation move
     std::cout << chessColumn << chessRow << " ";
+    std::cout.flush();
 }
 
 void ChessWindow::drawCapturedPieces()
@@ -500,4 +492,53 @@ ChessWindow::~ChessWindow()
         delete window;
         window = nullptr;
     }
+}
+
+void ChessWindow::drawExit()
+{
+    // Clear the window
+    window->clear();
+
+    // Create a text object to display the winner
+    sf::Text winnerText;
+    winnerText.setFont(fonts[0]); // Assuming fonts[0] contains the desired font
+    winnerText.setCharacterSize(50);
+    winnerText.setFillColor(sf::Color::White);
+
+    // Determine the winner based on the player turn
+    std::string winner;
+
+    if (playerTurn == 0)
+    {
+        winner = "Black Wins!";
+    }
+    else
+    {
+        winner = "White Wins!";
+    }
+    if (!exit)
+    {
+
+        if (playerTurn)
+        {
+            playSound(4); // Playing sound for white win
+            std::cout << "White Wins!\n";
+        }
+        else
+        {
+            playSound(5); // Playing sound for black win
+            std::cout << "Black Wins!\n";
+        }
+        exit = true;
+    }
+    // Set the text to display the winner
+    winnerText.setString(winner);
+
+    // Position the text in the center of the window
+    sf::FloatRect textBounds = winnerText.getLocalBounds();
+    winnerText.setOrigin(textBounds.width / 2, textBounds.height / 2);
+    winnerText.setPosition(window->getSize().x / 2, window->getSize().y / 2);
+
+    // Draw the text on the window
+    window->draw(winnerText);
 }

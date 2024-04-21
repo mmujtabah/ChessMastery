@@ -22,6 +22,7 @@ private:
     ChessPiece *selectedPiece;
     std::vector<Position> validMoves;
     std::vector<ChessPiece *> capturedPieces;
+    bool exit = false;
 
 public:
     enum class GameState
@@ -36,6 +37,7 @@ public:
     void initWindow();
     void drawMenu();
     void drawBoard();
+    void drawExit();
     void drawCapturedPieces();
     void printMove(int row, int col);
     void drawCircle(const std::vector<Position> &validMoves, float leftMargin, float topMargin, float rightMargin, float bottomMargin);

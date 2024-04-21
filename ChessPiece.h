@@ -170,5 +170,5 @@ public:
     ChessPiece *getPieceAt(const Position &pos) const;
     void updateBlank(std::vector<std::vector<ChessPiece *>> &board) const;
     bool promotePawns();
-    int checkForKingCapture();
+    bool checkForKingCapture();
 };
