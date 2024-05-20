@@ -1,13 +1,3 @@
-# all: compile link
-
-# compile: 
-# 	g++ -c ChessMastery.cpp -I"C:\Users\ghost\Documents\GitHub\ChessMastery\SFML\include"
-
-# link:
-# 	g++ ChessMastery.o -o ChessMastery -L"C:\Users\ghost\Documents\GitHub\ChessMastery\SFML\lib" -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network
-
-# clean:
-# 	rm -f ChessMastery *.o
 all: compile link clean
 
 compile: 
